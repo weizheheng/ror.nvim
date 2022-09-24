@@ -1,0 +1,22 @@
+{
+  "name": "ror-snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "ruby",
+        "path": "./snippets/rails.json"
+      },
+      {
+        "language": "eruby",
+        "path": "./snippets/eruby.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/stimulus.json"
+      }
+    ]
+  }
+}

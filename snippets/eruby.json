@@ -1,0 +1,16 @@
+{
+  "link_to": {
+    "prefix": "link_to",
+
+    "body": ["<%= link_to(${1:body}, ${2:url}, class: $3) %>"],
+
+    "description": "link helper"
+  },
+  "each": {
+    "prefix": "each",
+
+    "body": ["<% ${1:items}.each do |${2:item}| %>", "  $2", "<% end %>"],
+
+    "description": "each do"
+  }
+}
