@@ -1,0 +1,9 @@
+{
+  "`delegate(*methods, to: nil, prefix: nil, allow_nil: nil, private: nil)`": {
+    "prefix": "delegate",
+    "body": [
+			"delegate: :${1:method}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${0:allow_nil}"
+    ],
+    "description": "[documentation](https://api.rubyonrails.org/classes/Module.html#method-i-delegate)"
+  }
+}

@@ -7,15 +7,27 @@
     "snippets": [
       {
         "language": "ruby",
-        "path": "./snippets/rails.json"
+        "path": "./snippets/active_model.json"
       },
       {
-        "language": "eruby",
-        "path": "./snippets/eruby.json"
+        "language": "ruby",
+        "path": "./snippets/active_support.json"
+      },
+      {
+        "language": "ruby",
+        "path": "./snippets/active_record.json"
+      },
+      {
+        "language": ["eruby", "ruby"],
+        "path": "./snippets/action_view.json"
       },
       {
         "language": "javascript",
         "path": "./snippets/stimulus.json"
+      },
+      {
+        "language": "ruby",
+        "path": "./snippets/minitest.json"
       }
     ]
   }

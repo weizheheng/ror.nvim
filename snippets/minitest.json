@@ -1,0 +1,76 @@
+{
+	"`assert_select(element, expected)`": {
+		"prefix": "assert_select",
+		"body": [
+			"assert_select ${1:element}, ${0:expected}"
+		],
+		"description": "[documentation](https://github.com/rails/rails-dom-testing/tree/8798b9349fb9540ad8cb9a0ce6cb88d1384a210b#selector-assertions)"
+	},
+	"`assert_response(type, message = nil)`": {
+		"prefix": "assert_response",
+		"body": [
+			"assert_response :${1:response_symbol}"
+		],
+		"description": "Available symbols:\n1. :success\n2. :redirect\n3. :missing\n4. :erorr\n\n[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActionDispatch/Assertions/ResponseAssertions.html#method-i-assert_response)"
+	},
+	"`assert_template(template_path)`": {
+		"prefix": "assert_template",
+		"body": [
+			"assert_template ${1:template}"
+		],
+		"description": "[documentation](https://github.com/rails/rails-controller-testing#assert_template)"
+	},
+	"`assert_redirected_to(options = {}, message = nil)`": {
+		"prefix": "assert_redirected_to",
+		"body": [
+			"assert_redirected_to ${1:redirect_url}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActionDispatch/Assertions/ResponseAssertions.html#method-i-assert_redirected_to)"
+	},
+	"`follow_redirect(**args)`": {
+		"prefix": "follow_redirect!",
+		"body": [
+			"follow_redirect!"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActionDispatch/Integration/RequestHelpers.html#method-i-follow_redirect-21)"
+	},
+	"`assert_equal(exp, act, msg = nil)`": {
+		"prefix": "assert_equal",
+		"body": [
+			"assert_equal ${1:expected}, ${0:actual}"
+		],
+		"description": "[documentation](https://ruby-doc.org/stdlib-3.1.2/libdoc/minitest/rdoc/Minitest/Assertions.html#method-i-assert_equal)"
+	},
+	"`assert(test, msg = nil)`": {
+		"prefix": "assert",
+		"body": [
+			"assert ${1:boolean}"
+		],
+		"description": "Fails unless test is truthy.\n\n[documentation](https://ruby-doc.org/stdlib-3.1.2/libdoc/minitest/rdoc/Minitest/Assertions.html#method-i-assert)"
+	},
+	"`assert_not(object, message = nil)`": {
+		"prefix": "assert_not",
+		"body": [
+			"assert_not ${1:boolean}"
+		],
+		"description": "Asserts that an expression is not truthy. Passes if object is nil or false.\n\n[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActiveSupport/Testing/Assertions.html#method-i-assert_not)"
+	},
+	"`assert_difference(expression, *args, &block)`": {
+		"prefix": "assert_difference",
+		"body": [
+			"assert_difference '${1:model}.count', ${2:number} do",
+			"\t${3:request}",
+			"end"
+		],
+		"description": "Test numeric difference between the return value of an expression as a result of what is evaluated in the yielded block.\n\n[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActiveSupport/Testing/Assertions.html#method-i-assert_difference)"
+	},
+	"`assert_no_difference(expression, message = nil, &block)`": {
+		"prefix": "assert_no_difference",
+		"body": [
+			"assert_difference '${1:model}.count' do",
+			"\t${2:request}",
+			"end"
+		],
+		"description": "Assertion that the numeric result of evaluating an expression is not changed before and after invoking the passed in block.\n\n[documentation](https://api.rubyonrails.org/v7.0.4/classes/ActiveSupport/Testing/Assertions.html#method-i-assert_no_difference)"
+	}
+}

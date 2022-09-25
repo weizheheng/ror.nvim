@@ -1,0 +1,72 @@
+{
+	"`add_column(table_name, column_name, type, **options)`": {
+		"prefix": "add_column",
+		"body": [
+			"add_column :${1:table_name}, :${2:column_name}, :${0:data_type}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html#method-i-add_column)"
+	},
+	"`add_index(table_name, column_name, **options)`": {
+		"prefix": "add_index",
+		"body": [
+			"add_index :${1:table_name}, :${2:column_name}, unique: ${3:boolean}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html#method-i-add_index)"
+	},
+	"`remove_column(table_name, column_name, type = nil, **options)`": {
+		"prefix": "remove_column",
+		"body": [
+			"remove_column :${1:table_name}, :${0:column_name}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html#method-i-remove_column)"
+	},
+	"`rename_column(table_name, column_name, new_column_name)`": {
+		"prefix": "rename_column",
+		"body": [
+			"rename_column :${1:table_name}, :${2:old_column_name}, :${0:new_column_name}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html#method-i-rename_column)"
+	},
+	"`change_column(table_name, column_name, type, **options)`": {
+		"prefix": "change_column_type",
+		"body": [
+			"change_column :${1:table_name}, :${2:old_column_name}, :${0:data_type}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html#method-i-change_column)"
+	},
+	"`has_many(name, scope = nl, **options, &extension)` dependent": {
+		"prefix": "has_many_dependent",
+		"body": [
+			"has_many :${1:object}, dependent: :${0:destroy}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many)"
+	},
+	"`has_many(name, scope = nl, **options, &extension)`": {
+		"prefix": "has_many",
+		"body": [
+			"has_many :${0:object}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many)"
+	},
+	"`has_one(name, scope = nil, **options)`": {
+		"prefix": "has_one",
+		"body": [
+			"has_one :${0:object}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_one)"
+	},
+	"`has_one(name, scope = nil, **options)` dependent": {
+		"prefix": "has_one_dependent",
+		"body": [
+			"has_one :${1:object}, dependent: :${0:destroy}"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_one)"
+	},
+	"`scope(name, body, &block)`": {
+		"prefix": "scope",
+		"body": [
+			"scope :${1:name}, -> { where(${2:field}: ${0:value}) }"
+		],
+		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveRecord/Scoping/Named/ClassMethods.html#method-i-scope)"
+	}
+}

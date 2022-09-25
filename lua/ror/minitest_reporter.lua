@@ -52,17 +52,17 @@ vim.api.nvim_create_user_command("MinitestRun", function(attributes)
         local decoded = vim.json.decode(line)
         if decoded.status == "PASS" then
           local text = { "✅" }
-          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line), 0, {
+          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
             virt_text = { text }
           })
         else
           local text = { "❌" }
-          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line), 0, {
+          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
             virt_text = { text }
           })
           table.insert(failed, {
             bufnr = bufnr,
-            lnum = tonumber(decoded.line),
+            lnum = tonumber(decoded.line) - 1,
             col = 0,
             severity = vim.diagnostic.severity.ERROR,
             source = "minitest",
