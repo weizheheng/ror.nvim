@@ -21,9 +21,23 @@ and I can't stop thinking about having this in my workflow. So I decided to give
 create a [minitest-json-reporter gem](https://rubygems.org/gems/minitest-json-reporter) so that I
 can control the shape of the response and then use it here to integrate with the Neovim ecosystem.
 
+#### Prerequisite
+You will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
+to your Ruby on Rails project:
+
+```ruby
+group :test do
+  gem "minitest-json-reporter"
+end
+```
+
 #### Usage
 ```lua
--- Set a keybind to the below commands
+-- Set a keybind to the below commands, some example:
+vim.keymap.set("n", "<Leader>ml", ":MinitestRun Line<CR>")
+vim.keymap.set("n", "<Leader>mf", ":MinitestRun File<CR>")
+vim.keymap.set("n", "<Leader>mc", ":MinitestClear<CR>")
+
 -- Or call the command directly
 :MinitestRun Line -- run test on the current cursor position
 :MinitestRun File -- run the whole test file
