@@ -10,7 +10,14 @@ built-in methods. There are active developments on adding types to Ruby code wit
 [Sorbet](https://sorbet.org/) and Ruby's built-in [rbs](https://github.com/ruby/rbs) which when
 pair with [steep](https://github.com/soutaro/steep) might give a very good developmet experience
 with all language server features. I am excited to put my hands on those tools, but for now, here
-you can find a list of snippets that might be useful for you to develop a Rails app.
+are a list of snippets that might be useful for you while building a Rails app.
+
+Example:
+- Simple definition
+- Link to the documentation (Tired of Googling them everytime)
+
+<img width="939" alt="image" src="https://user-images.githubusercontent.com/40255418/192268415-e3920857-e6e5-435d-aff9-81db6e695922.png">
+
 
 ### 2. Minitest reporter integration
 **Watch the [DEMO VIDEO](https://share.cleanshot.com/kjXYPU)**
