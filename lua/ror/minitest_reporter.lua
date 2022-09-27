@@ -41,7 +41,7 @@ vim.api.nvim_create_user_command("MinitestRun", function(attributes)
   )
   local function get_notification_message()
     if attributes.args == "Line" then
-      return M._opts.notification_messages.line ... cursor_position
+      return M._opts.notification_messages.line .. cursor_position
     else
       return M._opts.notification_messages.file
     end
