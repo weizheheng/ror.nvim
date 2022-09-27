@@ -1,11 +1,15 @@
-vim.api.nvim_create_user_command("MinitestRun", function(attributes)
+local config = require("ror.config").values.minitest
+
+local M = {}
+
+local function run(type)
   local bufnr = vim.api.nvim_get_current_buf()
-  local ns = vim.api.nvim_create_namespace("minitest")
+  local ns = vim.api.nvim_create_namespace("ror-minitest")
   local relative_file_path = vim.fn.expand('%')
   local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
 
   local function get_test_path()
-    if attributes.args == "Line" then
+    if type == "Line" then
       return relative_file_path .. ":" .. cursor_position
     else
       return relative_file_path
@@ -19,18 +23,18 @@ vim.api.nvim_create_user_command("MinitestRun", function(attributes)
 
   local notification_bufnr = vim.api.nvim_create_buf(false, true)
   -- Create a test running floating window
+  local function get_notification_message()
+    if type == "Line" then
+      return config.message.line .. " " .. cursor_position .. "..."
+    else
+      return config.message.file
+    end
+  end
   local notification_winnr = vim.api.nvim_open_win(
     notification_bufnr,
     false,
-    { relative="cursor", anchor="SW", width=35, height=1, row=0, col=0, border="double", style="minimal" }
+    { relative="cursor", anchor="SW", width=#get_notification_message(), height=1, row=0, col=0, border="double", style="minimal" }
   )
-  local function get_notification_message()
-    if attributes.args == "Line" then
-      return "Running test on line " .. cursor_position .. "..."
-    else
-      return "Chill, running all the tests..."
-    end
-  end
   vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { get_notification_message() })
 
   vim.fn.jobstart({ "rails", "test", get_test_path(), "--json" }, {
@@ -51,12 +55,12 @@ vim.api.nvim_create_user_command("MinitestRun", function(attributes)
       for _, line in ipairs(data) do
         local decoded = vim.json.decode(line)
         if decoded.status == "PASS" then
-          local text = { "✅" }
+          local text = { config.pass_icon }
           vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
             virt_text = { text }
           })
         else
-          local text = { "❌" }
+          local text = { config.fail_icon }
           vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
             virt_text = { text }
           })
@@ -87,19 +91,23 @@ vim.api.nvim_create_user_command("MinitestRun", function(attributes)
       vim.api.nvim_buf_delete(notification_bufnr, {})
     end,
   })
-end, {
-  nargs = 1,
-  complete = function(ArgLead, CmdLine, CursorPos)
-    -- return completion candidates as a list-like table
-    return { "File",  "Line" }
-  end,
-})
+end
 
-vim.api.nvim_create_user_command("MinitestClear", function()
+local function clear()
   local bufnr = vim.api.nvim_get_current_buf()
-  local ns = vim.api.nvim_create_namespace("minitest")
+  local ns = vim.api.nvim_create_namespace("ror-minitest")
   -- Clear extmark
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   -- Hide current diagnostic
   vim.diagnostic.hide(ns, bufnr)
-end, {})
+end
+
+function M.run(type)
+  run(type)
+end
+
+function M.clear()
+  clear()
+end
+
+return M

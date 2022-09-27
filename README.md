@@ -1,6 +1,28 @@
 # ror.nvim
 Make Ruby on Rails development experience FUN!
 
+## Installation
+```vim
+Plug 'weizheheng/ror.nvim'
+```
+
+## Usage
+```lua
+-- The default settings
+require("ror").setup({
+  minitest = {
+    message = {
+      file = "Running all the tests...",
+      -- This will be follow by a space, current cursor line number and ...
+      -- E.g. Running test on line 10...
+      line = "Running test on line"
+    },
+    pass_icon = "✅",
+    fail_icon = "❌"
+  }
+})
+```
+
 ## Features
 
 ### 1. Snippets
@@ -18,8 +40,18 @@ Example:
 
 <img width="939" alt="image" src="https://user-images.githubusercontent.com/40255418/192268415-e3920857-e6e5-435d-aff9-81db6e695922.png">
 
+#### Prerequisite
+- Snippets is tested to be working with [Luasnip](https://github.com/L3MON4D3/LuaSnip)
+- This should work with other snippets plugin if they support loading Vscode-like snippets
 
-### 2. Minitest reporter integration
+#### Usage
+```lua
+-- With luasnip installed, you will need to add this line to your config
+require("luasnip.loaders.from_vscode").lazy_load()
+```
+
+
+### 2. Minitest integration
 **Watch the [DEMO VIDEO](https://share.cleanshot.com/kjXYPU)**
 
 Recently, I started enjoying writing tests, and want to learn to write better tests. Then I came
@@ -41,12 +73,12 @@ end
 #### Usage
 ```lua
 -- Set a keybind to the below commands, some example:
-vim.keymap.set("n", "<Leader>ml", ":MinitestRun Line<CR>")
-vim.keymap.set("n", "<Leader>mf", ":MinitestRun File<CR>")
-vim.keymap.set("n", "<Leader>mc", ":MinitestClear<CR>")
+vim.keymap.set("n", "<Leader>ml", ":lua require('ror.minitest').run()<CR>")
+vim.keymap.set("n", "<Leader>mf", ":lua require('ror.minitest').run('Line')<CR>")
+vim.keymap.set("n", "<Leader>mc", ":lua require('ror.minitest').clear()<CR>")
 
 -- Or call the command directly
-:MinitestRun Line -- run test on the current cursor position
-:MinitestRun File -- run the whole test file
-:MinitestClear -- clear diagnostics and extmark
+:RorMinitestRun -- run the whole test file
+:RorMinitestRun Line -- run test on the current cursor position
+:RorMinitestClear -- clear diagnostics and extmark
 ```
