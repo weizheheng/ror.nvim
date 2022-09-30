@@ -12,3 +12,7 @@ vim.api.nvim_create_user_command("RorMinitestClear", function()
   require("ror.minitest").clear()
 end, {})
 
+vim.api.nvim_create_user_command("RorMinitestAttachTerminal", function()
+  require("ror.minitest").attach_terminal()
+end, {})
+
