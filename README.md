@@ -53,7 +53,7 @@ require("luasnip.loaders.from_vscode").lazy_load()
 
 ### 2. Running Tests
 
-**Watch the [DEMO VIDEO](https://share.cleanshot.com/kjXYPU)**
+**Watch the [DEMO VIDEO](https://share.cleanshot.com/pzSV9d)**
 
 This is now supporting both [minitest](https://github.com/minitest/minitest) and [rspec-rails](https://github.com/rspec/rspec-rails). 
 
