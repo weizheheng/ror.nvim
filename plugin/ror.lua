@@ -1,5 +1,5 @@
-vim.api.nvim_create_user_command("RorMinitestRun", function(attributes)
-  require("ror.minitest").run(attributes.args)
+vim.api.nvim_create_user_command("RorTestRun", function(attributes)
+  require("ror.test").run(attributes.args)
 end, {
   nargs = "?",
   complete = function()
@@ -8,11 +8,11 @@ end, {
   end,
 })
 
-vim.api.nvim_create_user_command("RorMinitestClear", function()
-  require("ror.minitest").clear()
+vim.api.nvim_create_user_command("RorTestClear", function()
+  require("ror.test").clear()
 end, {})
 
-vim.api.nvim_create_user_command("RorMinitestAttachTerminal", function()
-  require("ror.minitest").attach_terminal()
+vim.api.nvim_create_user_command("RorTestAttachTerminal", function()
+  require("ror.test").attach_terminal()
 end, {})
 

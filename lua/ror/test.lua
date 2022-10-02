@@ -1,4 +1,4 @@
-local config = require("ror.config").values.minitest
+local config = require("ror.config").values.test
 
 local M = {}
 
@@ -15,6 +15,7 @@ local function run(type)
       return relative_file_path
     end
   end
+  local test_path = get_test_path()
 
   -- Clear extmark
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
@@ -30,12 +31,21 @@ local function run(type)
       return config.message.file
     end
   end
+  local notification_length = #get_notification_message()
 
-  local notification_winnr = vim.api.nvim_open_win(
-    notification_bufnr,
-    false,
-    { relative="cursor", anchor="SW", width=#get_notification_message(), height=1, row=0, col=0, border="double", style="minimal" }
-  )
+  local ui = vim.api.nvim_list_uis()[1]
+  local win_config = {
+    relative="editor",
+    anchor = "SW",
+    width=notification_length,
+    height=1,
+    row=0,
+    col=(ui.width / 2) - (notification_length / 2),
+    border="double",
+    style="minimal"
+  }
+  local notification_winnr = vim.api.nvim_open_win(notification_bufnr, false, win_config)
+  vim.api.nvim_win_set_option(notification_winnr, "winhl", "Normal:MoreMsg")
   vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { get_notification_message() })
 
   local terminal_bufnr = vim.api.nvim_create_buf(false, true)
@@ -43,70 +53,11 @@ local function run(type)
   M.terminal_bufnr = terminal_bufnr
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
-    vim.fn.termopen({ "rails", "test", get_test_path(), "--json" }, {
-      stdout_buffered = true,
-      on_stdout = function(_, data)
-        local failed = {}
-        local function filter_response(response)
-          local new_table = {}
-          local index = 1
-          for _, v in ipairs(response) do
-            if string.find(v, '{"name":') then
-              new_table[index] = v
-              index = index + 1
-            end
-          end
-
-          return new_table
-        end
-
-        local filtered_result = filter_response(data)
-
-        if not filtered_result then
-          return
-        end
-
-        for _, line in ipairs(filtered_result) do
-          local decoded = vim.json.decode(line)
-          if decoded.status == "PASS" then
-            local text = { config.pass_icon }
-            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
-              virt_text = { text }
-            })
-          else
-            local text = { config.fail_icon }
-            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
-              virt_text = { text }
-            })
-            table.insert(failed, {
-              bufnr = bufnr,
-              lnum = tonumber(decoded.line) - 1,
-              col = 0,
-              severity = vim.diagnostic.severity.ERROR,
-              source = "minitest",
-              message = decoded.failures,
-              user_data = {},
-            })
-          end
-        end
-
-        vim.diagnostic.set(ns, bufnr, failed, {})
-      end,
-      on_stderr = function(_, data)
-        if data[1] ~= "" then
-          print("Error DATA: ")
-          print(vim.inspect(data))
-        end
-      end,
-      on_exit = function()
-        -- close the notification window
-        vim.api.nvim_win_close(tonumber(notification_winnr), true)
-        -- delete the notification buffer
-        vim.api.nvim_buf_delete(notification_bufnr, {})
-        -- delete the terminal buffer
-        vim.api.nvim_buf_delete(terminal_bufnr, {})
-      end,
-    })
+    if string.find(test_path, "_spec.rb") then
+      require("ror.test.rspec").run(test_path, bufnr, ns, notification_winnr, notification_bufnr, terminal_bufnr)
+    else
+      require("ror.test.minitest").run(test_path, bufnr, ns, notification_winnr, notification_bufnr, terminal_bufnr)
+    end
   end)
 end
 

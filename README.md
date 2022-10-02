@@ -51,18 +51,20 @@ require("luasnip.loaders.from_vscode").lazy_load()
 ```
 
 
-### 2. Minitest integration
+### 2. Running Tests
+
 **Watch the [DEMO VIDEO](https://share.cleanshot.com/kjXYPU)**
 
-Recently, I started enjoying writing tests, and want to learn to write better tests. Then I came
-across this [video](https://www.youtube.com/watch?v=cf72gMBrsI0) by [TJ DeVries](https://github.com/tjdevries)
-and I can't stop thinking about having this in my workflow. So I decided to give it a try and
-create a [minitest-json-reporter gem](https://rubygems.org/gems/minitest-json-reporter) so that I
-can control the shape of the response and then use it here to integrate with the Neovim ecosystem.
+This is now supporting both [minitest](https://github.com/minitest/minitest) and [rspec-rails](https://github.com/rspec/rspec-rails). 
+
+Running test with ror.nvim provides:
+1. Quick feedback loop on showing you the result of the test in the test file.
+2. A floating terminal window you can attached to when running the test with a debugger.
+
 
 #### Prerequisite
-You will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
-to your Ruby on Rails project:
+**If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
+to your Ruby on Rails project**:
 
 ```ruby
 group :test do
@@ -73,12 +75,14 @@ end
 #### Usage
 ```lua
 -- Set a keybind to the below commands, some example:
-vim.keymap.set("n", "<Leader>ml", ":lua require('ror.minitest').run()<CR>")
-vim.keymap.set("n", "<Leader>mf", ":lua require('ror.minitest').run('Line')<CR>")
-vim.keymap.set("n", "<Leader>mc", ":lua require('ror.minitest').clear()<CR>")
+vim.keymap.set("n", "<Leader>tl", ":lua require('ror.test').run()<CR>")
+vim.keymap.set("n", "<Leader>tf", ":lua require('ror.test').run('Line')<CR>")
+vim.keymap.set("n", "<Leader>tc", ":lua require('ror.test').clear()<CR>")
+vim.keymap.set("n", "<Leader>ta", ":lua require('ror.test').attach_terminal()<CR>")
 
 -- Or call the command directly
 :RorMinitestRun -- run the whole test file
 :RorMinitestRun Line -- run test on the current cursor position
 :RorMinitestClear -- clear diagnostics and extmark
+:RorMinitestAttachTerminal -- attach the terminal (useful when running test with debugger)
 ```
