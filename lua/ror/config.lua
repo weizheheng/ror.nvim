@@ -40,7 +40,7 @@ local config = {}
 config.values = _RorConfig
 
 local ror_defaults = {
-  minitest = {
+  test = {
     message = {
       file = "Running all the tests...",
       line = "Running test on line"
