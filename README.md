@@ -59,8 +59,10 @@ This is now supporting both [minitest](https://github.com/minitest/minitest) and
 
 Running test with ror.nvim provides:
 1. Quick feedback loop on showing you the result of the test in the test file.
-2. A floating terminal window you can attached to when running the test with a debugger.
+  ![test result in file](https://user-images.githubusercontent.com/40255418/193445692-5e475a17-16d1-4953-b4e9-8617cda2ed14.png)
 
+2. A floating terminal window you can attached to when running the test with a debugger.
+  ![attached terminal](https://user-images.githubusercontent.com/40255418/193445643-f91d7622-bcca-424a-867e-8998503581d0.png)
 
 #### Prerequisite
 **If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
