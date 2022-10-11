@@ -77,8 +77,8 @@ end
 #### Usage
 ```lua
 -- Set a keybind to the below commands, some example:
-vim.keymap.set("n", "<Leader>tl", ":lua require('ror.test').run()<CR>")
-vim.keymap.set("n", "<Leader>tf", ":lua require('ror.test').run('Line')<CR>")
+vim.keymap.set("n", "<Leader>tf", ":lua require('ror.test').run()<CR>")
+vim.keymap.set("n", "<Leader>tl", ":lua require('ror.test').run('Line')<CR>")
 vim.keymap.set("n", "<Leader>tc", ":lua require('ror.test').clear()<CR>")
 vim.keymap.set("n", "<Leader>ta", ":lua require('ror.test').attach_terminal()<CR>")
 
