@@ -10,7 +10,7 @@ Plug 'weizheheng/ror.nvim'
 ```lua
 -- The default settings
 require("ror").setup({
-  minitest = {
+  test = {
     message = {
       file = "Running all the tests...",
       -- This will be follow by a space, current cursor line number and ...
