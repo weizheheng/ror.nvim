@@ -21,15 +21,37 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
             for _, v in ipairs(response) do
               if string.find(v, '{"version"') then
                 return v
+              elseif string.find(v, "{\"version\"") then
+                return v
               end
             end
           end
 
           local filtered_result = filter_response(response_data)
-          local start, _ = string.find(filtered_result, '{"version"')
-          local _, finish = string.find(filtered_result, 'failures"}')
 
-          return vim.json.decode(string.sub(filtered_result, start, finish)).examples
+          local function get_start_index(result)
+            local start, _ = string.find(result, '{"version"')
+            if start == nil then
+              start, _ = string.find(result, '{"version"')
+            end
+
+            return start
+          end
+
+          local function get_finish_index(result)
+            print(result)
+            local _, finish = string.find(result, 'failure"}')
+            if finish == nil then
+              _, finish = string.find(result, 'failures"}')
+            end
+
+            return finish
+          end
+
+          local start_index = get_start_index(filtered_result)
+          local finish_index = get_finish_index(filtered_result)
+
+          return vim.json.decode(string.sub(filtered_result, start_index, finish_index)).examples
         end
       end
 

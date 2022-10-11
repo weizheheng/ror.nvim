@@ -6,7 +6,7 @@
 		],
 		"description": "[documentation](https://api.rubyonrails.org/classes/ActiveModel/Validations/HelperMethods.html#method-i-validates_presence_of)"
 	},
-	"validates_uniqueness_of(*attr_names)": {
+	"`validates_uniqueness_of(*attr_names)`": {
 		"prefix": "validates_uniqueness_of",
 		"body": [
 			"validates_uniqueness_of :${1:attribute}, scope: :${2:scope}"
