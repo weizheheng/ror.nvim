@@ -39,7 +39,6 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
           end
 
           local function get_finish_index(result)
-            print(result)
             local _, finish = string.find(result, 'failure"}')
             if finish == nil then
               _, finish = string.find(result, 'failures"}')
