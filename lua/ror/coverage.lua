@@ -44,6 +44,10 @@ function M.show()
 
   local current_file_coverage_table = get_current_file_coverage(coverage.coverage)
 
+  if current_file_coverage_table == nil then
+    return
+  end
+
   for index, value in pairs(current_file_coverage_table) do
     if value == 0 then
       vim.api.nvim_buf_add_highlight(bufnr, ns, down_hl_group, index - 1, 0, -1)
