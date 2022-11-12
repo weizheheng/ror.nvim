@@ -7,6 +7,10 @@
     "snippets": [
       {
         "language": "ruby",
+        "path": "./snippets/ruby.json"
+      },
+      {
+        "language": "ruby",
         "path": "./snippets/active_model.json"
       },
       {

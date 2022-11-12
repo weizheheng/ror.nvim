@@ -16,3 +16,11 @@ vim.api.nvim_create_user_command("RorTestAttachTerminal", function()
   require("ror.test").attach_terminal()
 end, {})
 
+vim.api.nvim_create_user_command("RorShowCoverage", function()
+  require("ror.coverage").show()
+end, {})
+
+vim.api.nvim_create_user_command("RorClearCoverage", function()
+  require("ror.coverage").clear()
+end, {})
+

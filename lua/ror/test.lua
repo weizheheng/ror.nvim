@@ -22,13 +22,21 @@ local function run(type)
   -- Reset current diagnostic
   vim.diagnostic.reset(ns, bufnr)
 
+  if M.notification_winnr ~= nil and vim.api.nvim_win_is_valid(M.notification_winnr) then
+    vim.api.nvim_win_close(tonumber(M.notification_winnr), true)
+  end
+  if M.notification_bufnr ~= nil and vim.api.nvim_buf_is_valid(M.notification_bufnr) then
+    vim.api.nvim_buf_delete(M.notification_bufnr, {})
+  end
+
   local notification_bufnr = vim.api.nvim_create_buf(false, true)
+  M.notification_bufnr = notification_bufnr
   -- Create a test running floating window
   local function get_notification_message()
     if type == "Line" then
-      return config.message.line .. " " .. cursor_position .. "..."
+      return config.message.line .. ": " .. relative_file_path .. ":" .. cursor_position .. "..."
     else
-      return config.message.file
+      return config.message.file .. ": " .. relative_file_path .. "..."
     end
   end
   local notification_length = #get_notification_message()
@@ -45,6 +53,8 @@ local function run(type)
     style="minimal"
   }
   local notification_winnr = vim.api.nvim_open_win(notification_bufnr, false, win_config)
+  M.notification_winnr = notification_winnr
+
   vim.api.nvim_win_set_option(notification_winnr, "winhl", "Normal:MoreMsg")
   vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { get_notification_message() })
 
@@ -68,6 +78,17 @@ local function clear()
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   -- Hide current diagnostic
   vim.diagnostic.hide(ns, bufnr)
+
+  if M.notification_winnr ~= nil and vim.api.nvim_win_is_valid(M.notification_winnr) then
+    vim.api.nvim_win_close(tonumber(M.notification_winnr), true)
+  end
+  if M.notification_bufnr ~= nil and vim.api.nvim_buf_is_valid(M.notification_bufnr) then
+    vim.api.nvim_buf_delete(M.notification_bufnr, {})
+  end
+
+  -- Reseting
+  M.notification_bufnr = nil
+  M.notification_winnr = nil
 end
 
 function M.run(type)

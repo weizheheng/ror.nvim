@@ -42,8 +42,12 @@ config.values = _RorConfig
 local ror_defaults = {
   test = {
     message = {
-      file = "Running all the tests...",
-      line = "Running test on line"
+      file = "Running test file",
+      line = "Running single test"
+    },
+    coverage = {
+      up = "DiffAdd",
+      down = "DiffDelete",
     },
     pass_icon = "✅",
     fail_icon = "❌"
@@ -55,7 +59,7 @@ function config.set_defaults(user_defaults)
   ror_defaults = ror_defaults
 
   local function get(name, default_val)
-    if name == "minitest_reporter" then
+    if name == "test" then
       return smarter_depth_2_extend(
         vim.F.if_nil(user_defaults[name], {}),
         vim.tbl_deep_extend("keep", vim.F.if_nil(config.values[name], {}), vim.F.if_nil(default_val, {}))
