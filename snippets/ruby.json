@@ -1,0 +1,7 @@
+{
+  "frozen_string_literal": {
+    "prefix": "frozen_string_literal",
+    "body": ["# frozen_string_literal: true"],
+    "description": "[documentation](https://ruby-doc.org/core-3.1.2/doc/syntax/comments_rdoc.html#label-Magic+Comments)"
+  }
+}

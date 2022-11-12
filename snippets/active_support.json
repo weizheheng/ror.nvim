@@ -5,5 +5,17 @@
 			"delegate: :${1:method}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${0:allow_nil}"
     ],
     "description": "[documentation](https://api.rubyonrails.org/classes/Module.html#method-i-delegate)"
+  },
+  "`ActiveSupport::Concern`": {
+    "prefix": "concern",
+    "body": [
+      "# frozen_string_literal: true\n",
+      "module ${1:ModuleName}",
+      "\textend ActiveSupport::Concern\n",
+      "\tincluded do",
+      "\tend",
+      "end"
+    ],
+    "description": "[documentation](https://api.rubyonrails.org/classes/ActiveSupport/Concern.html)"
   }
 }

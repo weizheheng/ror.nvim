@@ -12,10 +12,17 @@ Plug 'weizheheng/ror.nvim'
 require("ror").setup({
   test = {
     message = {
-      file = "Running all the tests...",
-      -- This will be follow by a space, current cursor line number and ...
-      -- E.g. Running test on line 10...
-      line = "Running test on line"
+      -- Running test file: test/models/user_test.rb...
+      file = "Running test file",
+      -- Running single test: test/models/user_test.rb:9...
+      line = "Running single test"
+    },
+    coverage = {
+      -- To customize replace with the hex color you want for the highlight
+      -- guibg=#354a39
+      up = "DiffAdd",
+      -- guibg=#4a3536
+      down = "DiffDelete",
     },
     pass_icon = "✅",
     fail_icon = "❌"
@@ -64,6 +71,10 @@ Running test with ror.nvim provides:
 2. A floating terminal window you can attached to when running the test with a debugger.
   ![attached terminal](https://user-images.githubusercontent.com/40255418/193445643-f91d7622-bcca-424a-867e-8998503581d0.png)
 
+3. If you have [simplecov](https://github.com/simplecov-ruby/simplecov) setup for your project.
+   ror.nvim will show you the coverage after running the test. You can also see which lines are not
+   covered in the original file. **PS: You will need to add in the SimpleCov::Formatter::JSONFormatter**
+
 #### Prerequisite
 **If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
 to your Ruby on Rails project**:
@@ -81,10 +92,14 @@ vim.keymap.set("n", "<Leader>tf", ":lua require('ror.test').run()<CR>")
 vim.keymap.set("n", "<Leader>tl", ":lua require('ror.test').run('Line')<CR>")
 vim.keymap.set("n", "<Leader>tc", ":lua require('ror.test').clear()<CR>")
 vim.keymap.set("n", "<Leader>ta", ":lua require('ror.test').attach_terminal()<CR>")
+vim.keymap.set("n", "<Leader>cs", ":lua require('ror.coverage').show()<CR>")
+vim.keymap.set("n", "<Leader>ch", ":lua require('ror.coverage').clear()<CR>")
 
 -- Or call the command directly
-:RorMinitestRun -- run the whole test file
-:RorMinitestRun Line -- run test on the current cursor position
-:RorMinitestClear -- clear diagnostics and extmark
-:RorMinitestAttachTerminal -- attach the terminal (useful when running test with debugger)
+:RorTestRun -- run the whole test file
+:RorTestRun Line -- run test on the current cursor position
+:RorTestClear -- clear diagnostics and extmark
+:RorTestAttachTerminal -- attach the terminal (useful when running test with debugger)
+:RorShowCoverage -- attach the terminal (useful when running test with debugger)
+:RorClearCoverage -- attach the terminal (useful when running test with debugger)
 ```
