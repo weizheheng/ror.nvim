@@ -123,16 +123,28 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
       local coverage_percentage = get_coverage_percentage(test_path)
 
       -- Set the statistics window
-      local message = "Examples: " .. M.summary.example_count .. ", Failures: " .. M.summary.failure_count
+      local message = "Examples: " .. M.summary.example_count .. ", Failures: " .. (M.summary.failure_count or "0")
 
       if coverage_percentage ~= nil then
         local formatted_coverage = string.format("%.2f%%", coverage_percentage)
         message = message .. ", Coverage: " .. formatted_coverage
       end
-      vim.api.nvim_win_set_width(notification_winnr, #message)
-      vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { message })
-      -- delete the terminal buffer
-      vim.api.nvim_buf_delete(terminal_bufnr, {})
+      if notification_winnr and config.notification_style == "buffer" then
+        vim.api.nvim_win_set_width(notification_winnr, #message)
+        vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { message })
+        -- delete the terminal buffer
+        vim.api.nvim_buf_delete(terminal_bufnr, {})
+      else
+        local kind
+
+        if M.summary.failure_count and M.summary.failure_count > 0 then
+          kind = vim.log.levels.ERROR
+        else
+          kind = vim.log.levels.INFO
+        end
+
+        require("ror.notify").notify(message, { kind = kind, title = "Tests Result" })
+      end
     end,
   })
 end

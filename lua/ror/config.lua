@@ -50,7 +50,8 @@ local ror_defaults = {
       down = "DiffDelete",
     },
     pass_icon = "✅",
-    fail_icon = "❌"
+    fail_icon = "❌",
+    notification_style = "nvim-notify",
   }
 }
 

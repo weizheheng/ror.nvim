@@ -25,7 +25,8 @@ require("ror").setup({
       down = "DiffDelete",
     },
     pass_icon = "✅",
-    fail_icon = "❌"
+    fail_icon = "❌",
+    notification_style = "nvim-notify" -- can also be buffer or notify.  fallback to notify.
   }
 })
 ```
@@ -62,7 +63,7 @@ require("luasnip.loaders.from_vscode").lazy_load()
 
 **Watch the [DEMO VIDEO](https://youtu.be/NmA0ADMWaW0)**
 
-This is now supporting both [minitest](https://github.com/minitest/minitest) and [rspec-rails](https://github.com/rspec/rspec-rails). 
+This is now supporting both [minitest](https://github.com/minitest/minitest) and [rspec-rails](https://github.com/rspec/rspec-rails).
 
 Running test with ror.nvim provides:
 1. Quick feedback loop on showing you the result of the test in the test file.

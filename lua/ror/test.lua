@@ -1,4 +1,5 @@
 local config = require("ror.config").values.test
+local notify = require("ror.notify").notify
 
 local M = {}
 
@@ -47,7 +48,13 @@ local function execute_float_window(relative_file_path, cursor_position)
 end
 
 local function execute_notification(relative_file_path, cursor_position)
-  return execute_float_window(relative_file_path, cursor_position)
+  if config.notification_style == "buffer" then
+    return execute_float_window(relative_file_path, cursor_position)
+  else
+    local message = get_notification_message(relative_file_path, cursor_position)
+
+    notify(message)
+  end
 end
 
 local function run(type)
