@@ -72,7 +72,7 @@ This is now supporting both [minitest](https://github.com/minitest/minitest) and
 
 Running test with ror.nvim provides:
 1. Quick feedback loop on showing you the result of the test in the test file.
-  ![test result in file](https://user-images.githubusercontent.com/40255418/193445692-5e475a17-16d1-4953-b4e9-8617cda2ed14.png)
+  <img width="1267" alt="quick feedback loop" src="https://user-images.githubusercontent.com/40255418/202112014-3a5a0163-ea95-4b42-a071-50545a261da1.png">
 
 2. A floating terminal window you can attached to when running the test with a debugger.
   ![attached terminal](https://user-images.githubusercontent.com/40255418/193445643-f91d7622-bcca-424a-867e-8998503581d0.png)
