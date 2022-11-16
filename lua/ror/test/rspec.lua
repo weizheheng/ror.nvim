@@ -74,41 +74,43 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       M.summary = result.summary
 
       for _, decoded in ipairs(result.examples) do
-        if decoded.status == "passed" then
-          local text = { config.pass_icon }
-          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
-            virt_text = { text }
-          })
-        else
-          local function filter_backtrace(backtrace)
-            local new_table = {}
-            local index = 1
-            for _, v in ipairs(backtrace) do
-              if string.find(v, '_spec.rb:') then
-                new_table[index] = v
-                break
+        if string.find(decoded.file_path, test_path) then
+          if decoded.status == "passed" then
+            local text = { config.pass_icon }
+            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
+              virt_text = { text }
+            })
+          else
+            local function filter_backtrace(backtrace)
+              local new_table = {}
+              local index = 1
+              for _, v in ipairs(backtrace) do
+                if string.find(v, '_spec.rb:') then
+                  new_table[index] = v
+                  break
+                end
               end
+
+              return new_table
             end
 
-            return new_table
+            local fail_backtrace = filter_backtrace(decoded.exception.backtrace)[1]
+            local example_line = string.match(fail_backtrace, ":([^:]+)")
+
+            local text = { config.fail_icon }
+            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(example_line) - 1, 0, {
+              virt_text = { text }
+            })
+            table.insert(failed, {
+              bufnr = bufnr,
+              lnum = tonumber(example_line) - 1,
+              col = 0,
+              severity = vim.diagnostic.severity.ERROR,
+              source = "rspec",
+              message = decoded.exception.message,
+              user_data = {},
+            })
           end
-
-          local fail_backtrace = filter_backtrace(decoded.exception.backtrace)[1]
-          local example_line = string.match(fail_backtrace, ":([^:]+)")
-
-          local text = { config.fail_icon }
-          vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(example_line) - 1, 0, {
-            virt_text = { text }
-          })
-          table.insert(failed, {
-            bufnr = bufnr,
-            lnum = tonumber(example_line) - 1,
-            col = 0,
-            severity = vim.diagnostic.severity.ERROR,
-            source = "rspec",
-            message = decoded.exception.message,
-            user_data = {},
-          })
         end
       end
 
