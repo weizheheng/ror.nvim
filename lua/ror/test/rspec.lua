@@ -18,8 +18,14 @@ local function get_coverage_percentage(test_path)
   return coverage.percentage(original_file_path)
 end
 
-function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
-  vim.fn.termopen({ "bundle", "exec", "rspec", test_path, "--format", "j" }, {
+function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
+  local cmd = { "bundle", "exec", "rspec", test_path, "--format", "j" }
+
+  if type == "OnlyFailures" then
+    table.insert(cmd, "--only-failures")
+  end
+
+  vim.fn.termopen(cmd, {
     stdout_buffered = true,
     on_stdout = function(_, data)
       local failed = {}

@@ -64,6 +64,8 @@ local function run(type)
 
     if type == "Line" then
       return "File: " .. path .. ":" .. cursor_position
+    elseif type == "OnlyFailures" then
+      return "File: " .. path .. ": only failures"
     else
       return "File: " .. path
     end
@@ -98,9 +100,9 @@ local function run(type)
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
     if string.find(test_path, "_spec.rb") then
-      require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+      require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
     else
-      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
     end
   end)
 end
