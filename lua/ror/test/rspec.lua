@@ -121,12 +121,12 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       end
     end,
     on_exit = function()
-      local coverage_percentage = get_coverage_percentage(test_path)
+      local coverage_ok, coverage_percentage = pcall(get_coverage_percentage, test_path)
 
       -- Set the statistics window
       local message = "Examples: " .. M.summary.example_count .. ", Failures: " .. M.summary.failure_count
 
-      if coverage_percentage ~= nil then
+      if coverage_ok and coverage_percentage ~= nil then
         local formatted_coverage = string.format("%.2f%%", coverage_percentage)
         message = message .. ", Coverage: " .. formatted_coverage
       end
@@ -139,7 +139,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
         kind = vim.log.levels.INFO
       end
 
-      notify_instance.notify(
+      pcall(notify_instance.notify,
         message,
         kind,
         notify_record,
@@ -148,7 +148,6 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
           title = "Result: " .. vim.fn.fnamemodify(test_path, ":t")
         }
       )
-
       -- delete the terminal buffer
       vim.api.nvim_buf_delete(terminal_bufnr, {})
     end,
