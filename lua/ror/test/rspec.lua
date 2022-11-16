@@ -19,7 +19,14 @@ local function get_coverage_percentage(test_path)
 end
 
 function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
-  local cmd = { "bundle", "exec", "rspec", test_path, "--format", "j" }
+  local cmd
+
+  if type == "Last" then
+    cmd = vim.g.ror_last_command
+  else
+    cmd = { "bundle", "exec", "rspec", test_path, "--format", "j" }
+    vim.g.ror_last_command = cmd
+  end
 
   if type == "OnlyFailures" then
     table.insert(cmd, "--only-failures")
