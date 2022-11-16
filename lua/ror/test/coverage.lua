@@ -28,7 +28,7 @@ function M.percentage(original_file_path)
 
     for _, value in ipairs(table) do
       if value ~= vim.NIL then
-          result[#result + 1] = value
+        result[#result + 1] = value
       end
     end
 

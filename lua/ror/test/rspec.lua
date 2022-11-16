@@ -120,8 +120,6 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
       end
     end,
     on_exit = function()
-      vim.g.ror_waiting_attach = false
-
       local coverage_percentage = get_coverage_percentage(test_path)
 
       -- Set the statistics window
