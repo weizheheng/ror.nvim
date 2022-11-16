@@ -129,6 +129,7 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
         local formatted_coverage = string.format("%.2f%%", coverage_percentage)
         message = message .. ", Coverage: " .. formatted_coverage
       end
+
       if notification_winnr and config.notification_style == "buffer" then
         vim.api.nvim_win_set_width(notification_winnr, #message)
         vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { message })

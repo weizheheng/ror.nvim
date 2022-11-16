@@ -57,10 +57,43 @@ local function execute_notification(relative_file_path, cursor_position)
   end
 end
 
+local function non_empty_last_line(bufnr)
+  local lines = vim.fn.getbufline(bufnr, 1, '$')
+
+  local line = ""
+
+  for i = #lines, 1, -1 do
+    if lines[i] ~= "" then
+      line = lines[i]
+
+      break
+    end
+  end
+
+  return line
+end
+
+local function verify_debugger()
+  if M.terminal_bufnr and vim.fn.bufexists(M.terminal_bufnr) then
+    local last_line = non_empty_last_line(M.terminal_bufnr)
+
+    if last_line == '[Process exited 1]' or vim.fn.bufnr() == M.terminal_bufnr then
+      return
+    elseif last_line:match('%(byebug%)') or last_line:match('pry%(#.*%)') or last_line:match('%(rdbg%)') or last_line == ':' then
+      M.attach_terminal()
+      vim.cmd("startinsert")
+    else
+      vim.fn.timer_start(500, function ()
+        verify_debugger()
+      end)
+    end
+  end
+end
+
 local function run(type)
   local bufnr = vim.api.nvim_get_current_buf()
   local ns = vim.api.nvim_create_namespace("ror-minitest")
-  local relative_file_path = vim.fn.expand('%')
+  local relative_file_path = vim.fn.expand("%:~:.")
   local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
 
   local function get_test_path()
@@ -82,6 +115,11 @@ local function run(type)
   vim.diagnostic.reset(ns, bufnr)
 
   local notification_winnr, notification_bufnr = execute_notification(relative_file_path, cursor_position)
+
+  vim.fn.timer_start(500, function ()
+    verify_debugger()
+  end)
+
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
     if string.find(test_path, "_spec.rb") then

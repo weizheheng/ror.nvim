@@ -97,7 +97,18 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
         message = message .. ", Coverage: " .. formatted_coverage
       end
 
-      vim.api.nvim_win_set_width(notification_winnr, #message)
+      local ui = vim.api.nvim_list_uis()[1]
+      local win_config = {
+        relative="editor",
+        anchor = "SW",
+        width=#message,
+        height=1,
+        row=0,
+        col=(ui.width / 2) - (#message / 2),
+        border="double",
+        style="minimal"
+      }
+      vim.api.nvim_win_set_config(notification_winnr, win_config)
       vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { message })
 
       -- delete the terminal buffer
