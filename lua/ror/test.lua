@@ -80,7 +80,12 @@ local function run(type)
   local notification_message = get_notification_message()
   local notification_title = get_notification_title()
 
-  local notify_record = notify_instance.notify(notification_message, "warn", { bufnr = bufnr, title = notification_title })
+  local notify_record = notify_instance.notify(
+    notification_message,
+    "warn",
+    nil,
+    { bufnr = bufnr, title = notification_title }
+  )
 
   local terminal_bufnr = vim.api.nvim_create_buf(false, true)
 

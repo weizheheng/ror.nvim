@@ -30,6 +30,11 @@ require("ror").setup({
       -- guibg=#4a3536
       down = "DiffDelete",
     },
+    notification = {
+      -- Using timeout false will replace the progress notification window
+      -- Otherwise, the progress and the result will be a different notification window
+      timeout = false
+    },
     pass_icon = "✅",
     fail_icon = "❌"
   }

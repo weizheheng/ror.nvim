@@ -49,6 +49,9 @@ local ror_defaults = {
       up = "DiffAdd",
       down = "DiffDelete",
     },
+    notification = {
+      timeout = false,
+    },
     pass_icon = "✅",
     fail_icon = "❌"
   }

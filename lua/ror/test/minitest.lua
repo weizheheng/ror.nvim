@@ -109,8 +109,8 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       notify_instance.notify(
         message,
         kind,
+        notify_record,
         {
-          replace = notify_record,
           bufnr = bufnr,
           title = "Result: " .. vim.fn.fnamemodify(test_path, ":t")
         }
