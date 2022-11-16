@@ -24,3 +24,6 @@ vim.api.nvim_create_user_command("RorClearCoverage", function()
   require("ror.coverage").clear()
 end, {})
 
+vim.api.nvim_create_user_command("RorAddFrozenStringLiteral", function()
+  require("ror.frozen_string_literal").add()
+end, {})

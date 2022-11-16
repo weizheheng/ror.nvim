@@ -5,7 +5,7 @@ local M = {}
 local function run(type)
   local bufnr = vim.api.nvim_get_current_buf()
   local ns = vim.api.nvim_create_namespace("ror-minitest")
-  local relative_file_path = vim.fn.expand('%')
+  local relative_file_path = vim.fn.expand("%:~:.")
   local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
 
   local function get_test_path()
