@@ -19,12 +19,16 @@ function M.non_empty_last_line(bufnr)
 end
 
 function M.verify_debugger()
-  if M.terminal_bufnr and vim.fn.bufexists(M.terminal_bufnr) then
+  if M.terminal_bufnr and vim.fn.ror_waiting_attach and vim.fn.bufexists(M.terminal_bufnr) then
     local last_line = M.non_empty_last_line(M.terminal_bufnr)
 
     if last_line == '[Process exited 1]' or vim.fn.bufnr() == M.terminal_bufnr then
+      vim.g.ror_waiting_attach = false
+
       return
     elseif last_line:match('%(byebug%)') or last_line:match('pry%(#.*%)') or last_line:match('%(rdbg%)') or last_line == ':' then
+      vim.g.ror_waiting_attach = false
+
       M.attach_terminal()
 
       vim.cmd("startinsert")
@@ -35,7 +39,9 @@ function M.verify_debugger()
 end
 
 function M.start_clock()
-  vim.fn.timer_start(300, function ()
+  vim.g.ror_waiting_attach = true
+
+  vim.fn.timer_start(500, function ()
     M.verify_debugger()
   end)
 end
@@ -100,7 +106,7 @@ local function run(type)
 
   M.terminal_bufnr = terminal_bufnr
 
-  M.verify_debugger()
+  M.start_clock()
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
     if string.find(test_path, "_spec.rb") then
