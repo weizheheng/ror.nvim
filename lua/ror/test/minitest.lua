@@ -1,5 +1,6 @@
 local config = require("ror.config").values.test
 local coverage = require("ror.test.coverage")
+local notify_instance = require("ror.test.notify")
 
 local M = {}
 
@@ -17,7 +18,7 @@ local function get_coverage_percentage(test_path)
   return coverage.percentage(original_file_path)
 end
 
-function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, terminal_bufnr)
+function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
   vim.fn.termopen({ "rails", "test", test_path, "--json" }, {
     stdout_buffered = true,
     on_stdout = function(_, data)
@@ -97,19 +98,23 @@ function M.run(test_path, bufnr, ns, notification_winnr, notification_bufnr, ter
         message = message .. ", Coverage: " .. formatted_coverage
       end
 
-      local ui = vim.api.nvim_list_uis()[1]
-      local win_config = {
-        relative="editor",
-        anchor = "SW",
-        width=#message,
-        height=1,
-        row=0,
-        col=(ui.width / 2) - (#message / 2),
-        border="double",
-        style="minimal"
-      }
-      vim.api.nvim_win_set_config(notification_winnr, win_config)
-      vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { message })
+      local kind
+
+      if M.statistics.failures and M.statistics.failures > 0 then
+        kind = vim.log.levels.ERROR
+      else
+        kind = vim.log.levels.INFO
+      end
+
+      notify_instance.notify(
+        message,
+        kind,
+        {
+          replace = notify_record,
+          bufnr = bufnr,
+          title = "Result: " .. vim.fn.fnamemodify(test_path, ":t")
+        }
+      )
 
       -- delete the terminal buffer
       vim.api.nvim_buf_delete(terminal_bufnr, {})

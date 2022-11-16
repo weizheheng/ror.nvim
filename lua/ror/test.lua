@@ -1,4 +1,5 @@
 local config = require("ror.config").values.test
+local notify_instance = require("ror.test.notify")
 
 local M = {}
 
@@ -41,6 +42,7 @@ local function run(type)
   local relative_file_path = vim.fn.expand("%:~:.")
   local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
 
+
   local function get_test_path()
     if type == "Line" then
       return relative_file_path .. ":" .. cursor_position
@@ -54,42 +56,31 @@ local function run(type)
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   -- Reset current diagnostic
   vim.diagnostic.reset(ns, bufnr)
+  -- Close notification window
+  notify_instance.dismiss(bufnr)
 
-  if M.notification_winnr ~= nil and vim.api.nvim_win_is_valid(M.notification_winnr) then
-    vim.api.nvim_win_close(tonumber(M.notification_winnr), true)
-  end
-  if M.notification_bufnr ~= nil and vim.api.nvim_buf_is_valid(M.notification_bufnr) then
-    vim.api.nvim_buf_delete(M.notification_bufnr, {})
-  end
-
-  local notification_bufnr = vim.api.nvim_create_buf(false, true)
-  M.notification_bufnr = notification_bufnr
-  -- Create a test running floating window
   local function get_notification_message()
+    local path = vim.fn.fnamemodify(relative_file_path, ":t")
+
     if type == "Line" then
-      return config.message.line .. ": " .. relative_file_path .. ":" .. cursor_position .. "..."
+      return "File: " .. path .. ":" .. cursor_position
     else
-      return config.message.file .. ": " .. relative_file_path .. "..."
+      return "File: " .. path
     end
   end
-  local notification_length = #get_notification_message()
 
-  local ui = vim.api.nvim_list_uis()[1]
-  local win_config = {
-    relative="editor",
-    anchor = "SW",
-    width=notification_length,
-    height=1,
-    row=0,
-    col=(ui.width / 2) - (notification_length / 2),
-    border="double",
-    style="minimal"
-  }
-  local notification_winnr = vim.api.nvim_open_win(notification_bufnr, false, win_config)
-  M.notification_winnr = notification_winnr
+  local function get_notification_title()
+    if type == "Line" then
+      return config.message.line
+    else
+      return config.message.file
+    end
+  end
 
-  vim.api.nvim_win_set_option(notification_winnr, "winhl", "Normal:MoreMsg")
-  vim.api.nvim_buf_set_lines(notification_bufnr, 0, -1, false, { get_notification_message() })
+  local notification_message = get_notification_message()
+  local notification_title = get_notification_title()
+
+  local notify_record = notify_instance.notify(notification_message, "warn", { bufnr = bufnr, title = notification_title })
 
   local terminal_bufnr = vim.api.nvim_create_buf(false, true)
 
@@ -102,9 +93,9 @@ local function run(type)
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
     if string.find(test_path, "_spec.rb") then
-      require("ror.test.rspec").run(test_path, bufnr, ns, notification_winnr, notification_bufnr, terminal_bufnr)
+      require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
     else
-      require("ror.test.minitest").run(test_path, bufnr, ns, notification_winnr, notification_bufnr, terminal_bufnr)
+      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
     end
   end)
 end
@@ -116,17 +107,8 @@ local function clear()
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   -- Hide current diagnostic
   vim.diagnostic.hide(ns, bufnr)
-
-  if M.notification_winnr ~= nil and vim.api.nvim_win_is_valid(M.notification_winnr) then
-    vim.api.nvim_win_close(tonumber(M.notification_winnr), true)
-  end
-  if M.notification_bufnr ~= nil and vim.api.nvim_buf_is_valid(M.notification_bufnr) then
-    vim.api.nvim_buf_delete(M.notification_bufnr, {})
-  end
-
-  -- Reseting
-  M.notification_bufnr = nil
-  M.notification_winnr = nil
+  -- Close notification window
+  notify_instance.dismiss(bufnr)
 end
 
 function M.run(type)

@@ -6,16 +6,22 @@ Make Ruby on Rails development experience FUN!
 Plug 'weizheheng/ror.nvim'
 ```
 
+## Optional Dependencies
+
+1. [nvim-notify](https://github.com/rcarriga/nvim-notify) (RECOMMENDED)
+   - With nvim-notify installed you can get beautiful notification on when the test is running and
+       also display the result of the run when it's done.
+   - Otherwise, the notification will be shown in the command line through vim.notify.
+
 ## Usage
 ```lua
 -- The default settings
 require("ror").setup({
   test = {
     message = {
-      -- Running test file: test/models/user_test.rb...
-      file = "Running test file",
-      -- Running single test: test/models/user_test.rb:9...
-      line = "Running single test"
+      -- These are the default title for nvim-notify
+      file = "Running test file...",
+      line = "Running single test..."
     },
     coverage = {
       -- To customize replace with the hex color you want for the highlight
