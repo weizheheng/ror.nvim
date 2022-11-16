@@ -13,10 +13,23 @@ function M.percentage(original_file_path)
   local coverage_table = vim.fn.json_decode(Path:new(json_coverage_file_path):read())
 
   local current_file_coverage
-  for key, value in pairs(coverage_table.coverage) do
-    if key == original_file_path then
-      current_file_coverage = value.lines
+  -- Default JSON Formatter
+  if coverage_table.coverage then
+    for key, value in pairs(coverage_table.coverage) do
+      if key == original_file_path then
+        current_file_coverage = value.lines
+      end
     end
+  -- Custom simplecov-json formatter
+  elseif coverage_table.files then
+    for _, value in pairs(coverage_table.files) do
+      if value.filename == original_file_path then
+        print(vim.inspect(value))
+        current_file_coverage = value.coverage.lines
+      end
+    end
+  else
+    return nil
   end
 
   if current_file_coverage == nil then

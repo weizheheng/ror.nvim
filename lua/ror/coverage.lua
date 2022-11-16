@@ -35,14 +35,26 @@ function M.show()
   local bufnr = vim.api.nvim_get_current_buf()
 
   local function get_current_file_coverage(table)
-    for key, value in pairs(table) do
-      if key == original_file_path then
-        return value.lines
+    -- Default JSON Formatter
+    if table.coverage then
+      for key, value in pairs(table.coverage) do
+        if key == original_file_path then
+          return value.lines
+        end
       end
+    -- Custom simplecov-json formatter
+    elseif table.files then
+      for _, value in pairs(table.files) do
+        if value.filename == original_file_path then
+          return value.coverage.lines
+        end
+      end
+    else
+      return nil
     end
   end
 
-  local current_file_coverage_table = get_current_file_coverage(coverage.coverage)
+  local current_file_coverage_table = get_current_file_coverage(coverage)
 
   if current_file_coverage_table == nil then
     return

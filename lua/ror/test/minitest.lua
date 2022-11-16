@@ -88,12 +88,12 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       end
     end,
     on_exit = function()
-      local coverage_percentage = get_coverage_percentage(test_path)
+      local coverage_ok, coverage_percentage = pcall(get_coverage_percentage, test_path)
 
       -- Set the statistics window
       local message = "Assertions: " .. M.statistics.assertions .. ", Failures: " .. M.statistics.failures
 
-      if coverage_percentage ~= nil then
+      if coverage_ok and coverage_percentage ~= nil then
         local formatted_coverage = string.format("%.2f%%", coverage_percentage)
         message = message .. ", Coverage: " .. formatted_coverage
       end
