@@ -39,8 +39,6 @@ function M.verify_debugger()
 end
 
 function M.start_clock()
-  vim.g.ror_waiting_attach = true
-
   vim.fn.timer_start(500, function ()
     M.verify_debugger()
   end)
@@ -106,6 +104,7 @@ local function run(type)
 
   M.terminal_bufnr = terminal_bufnr
 
+  vim.g.ror_waiting_attach = true
   M.start_clock()
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
