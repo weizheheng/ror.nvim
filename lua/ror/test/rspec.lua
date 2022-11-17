@@ -5,21 +5,47 @@ local notify_instance = require("ror.test.notify")
 local M = {}
 
 local function read_file(file)
-    local f = assert(io.open(file, "rb"))
-    local content = f:read("*all")
-    f:close()
-    return content
+  local f = assert(io.open(file, "rb"))
+  local content = f:read("*all")
+  f:close()
+  return content
+end
+
+
+local function split(s, delimiter)
+  local result = {};
+
+  for match in ((s or '')..delimiter):gmatch("(.-)"..delimiter) do
+    table.insert(result, match);
+  end
+
+  return result;
 end
 
 local function find_behaves_like_line(decoded)
-  local regexp = "shared_examples ['\"]([%w%s%c%!%@%#%$%%%^%&%*%(%)%[%]%{%}%,%.%;%:%?%/%|%\\]+)['\"]"
-  local result = { read_file(decoded.file_path):match(regexp) }
+  local file_string = read_file(decoded.file_path)
 
-  if result[1] ~= '' and result[1] ~= nil then
+  if not file_string then
+    return 1
+  end
+
+  local file = split(file_string, "\n")
+  local result
+
+  for i = tonumber(decoded.line_number),1,-1 do
+    local regexp = "shared_examples ['\"](.*)['\"]"
+    result = file[i]:match(regexp)
+
+    if result then
+      break
+    end
+  end
+
+  if result then
     local lines = vim.fn.getline(1, '$')
 
     for i = 1, #lines, 1 do
-      if lines[i]:match("it_behaves_like [\'\"]" .. result[1] .. "[\'\"]") then
+      if lines[i]:match("it_behaves_like [\'\"]" .. result .. "[\'\"]") then
         return i
       end
     end
@@ -102,7 +128,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       for _, decoded in ipairs(result.examples) do
 
         if decoded.file_path ~= nil and decoded.file_path ~= "" then
-          local is_shared_example = not(decoded.file_path:find(test_path))
+          local is_shared_example = not (decoded.file_path:find(test_path))
 
           if decoded.status == "passed" then
             local text = { config.pass_icon }
@@ -136,7 +162,8 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             local exception_message
 
             if is_shared_example then
-              exception_message = (decoded.description or '') .. ' at ' .. (decoded.line_number or '') .. ': ' .. decoded.exception.message
+              exception_message = (decoded.description or '') ..
+                  ' at ' .. (decoded.line_number or '') .. ': ' .. decoded.exception.message
               example_line = find_behaves_like_line(decoded)
             else
               exception_message = decoded.exception.message
