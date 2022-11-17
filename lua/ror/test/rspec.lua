@@ -74,7 +74,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       M.summary = result.summary
 
       for _, decoded in ipairs(result.examples) do
-        if string.find(decoded.file_path, test_path) then
+        if string.find(decoded.file_path, vim.fn.fnamemodify(test_path, ":t:r")) ~= nil then
           if decoded.status == "passed" then
             local text = { config.pass_icon }
             vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
