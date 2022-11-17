@@ -4,6 +4,32 @@ local notify_instance = require("ror.test.notify")
 
 local M = {}
 
+local function read_file(file)
+    local f = assert(io.open(file, "rb"))
+    local content = f:read("*all")
+    f:close()
+    return content
+end
+
+local function find_behaves_like_line(decoded)
+  local regexp = "shared_examples ['\"]([%w%s%c%!%@%#%$%%%^%&%*%(%)%[%]%{%}%,%.%;%:%?%/%|%\\]+)['\"]"
+  local result = { read_file(decoded.file_path):match(regexp) }
+
+  if result[1] ~= '' and result[1] ~= nil then
+    local lines = vim.fn.getline(1, '$')
+
+    for i = 1, #lines, 1 do
+      if lines[i]:match("it_behaves_like [\'\"]" .. result[1] .. "[\'\"]") then
+        return i
+      end
+    end
+
+    return 1
+  else
+    return 1
+  end
+end
+
 local function get_coverage_percentage(test_path)
   local root_path = vim.fn.getcwd()
   local original_file_path = string.gsub(test_path, "spec", "/app", 1)
@@ -74,10 +100,21 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       M.summary = result.summary
 
       for _, decoded in ipairs(result.examples) do
-        if string.find(decoded.file_path, test_path) then
+
+        if decoded.file_path ~= nil and decoded.file_path ~= "" then
+          local is_shared_example = not(decoded.file_path:find(test_path))
+
           if decoded.status == "passed" then
             local text = { config.pass_icon }
-            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
+            local line
+
+            if is_shared_example then
+              line = find_behaves_like_line(decoded)
+            else
+              line = decoded.line_number
+            end
+
+            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(line) - 1, 0, {
               virt_text = { text }
             })
           else
@@ -95,7 +132,13 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             end
 
             local fail_backtrace = filter_backtrace(decoded.exception.backtrace)[1]
-            local example_line = string.match(fail_backtrace, ":([^:]+)")
+            local example_line
+
+            if is_shared_example then
+              example_line = find_behaves_like_line(decoded)
+            else
+              example_line = string.match(fail_backtrace, ":([^:]+)")
+            end
 
             local text = { config.fail_icon }
             vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(example_line) - 1, 0, {
