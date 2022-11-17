@@ -4,6 +4,58 @@ local notify_instance = require("ror.test.notify")
 
 local M = {}
 
+local function read_file(file)
+  local f = assert(io.open(file, "rb"))
+  local content = f:read("*all")
+  f:close()
+  return content
+end
+
+
+local function split(s, delimiter)
+  local result = {};
+
+  for match in ((s or '')..delimiter):gmatch("(.-)"..delimiter) do
+    table.insert(result, match);
+  end
+
+  return result;
+end
+
+local function find_behaves_like_line(decoded)
+  local file_string = read_file(decoded.file_path)
+
+  if not file_string then
+    return 1
+  end
+
+  local file = split(file_string, "\n")
+  local result
+
+  for i = tonumber(decoded.line_number),1,-1 do
+    local regexp = "shared_examples ['\"](.*)['\"]"
+    result = file[i]:match(regexp)
+
+    if result then
+      break
+    end
+  end
+
+  if result then
+    local lines = vim.fn.getline(1, '$')
+
+    for i = 1, #lines, 1 do
+      if lines[i]:match("it_behaves_like [\'\"]" .. result .. "[\'\"]") then
+        return i
+      end
+    end
+
+    return 1
+  else
+    return 1
+  end
+end
+
 local function get_coverage_percentage(test_path)
   local root_path = vim.fn.getcwd()
   local original_file_path = string.gsub(test_path, "spec", "/app", 1)
@@ -74,10 +126,20 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       M.summary = result.summary
 
       for _, decoded in ipairs(result.examples) do
-        if string.find(decoded.file_path, vim.fn.fnamemodify(test_path, ":t:r")) ~= nil then
+        if decoded.file_path ~= nil and decoded.file_path ~= "" then
+          local is_shared_example = not(string.find(decoded.file_path, vim.fn.fnamemodify(test_path, ":t:r")) ~= nil)
+
           if decoded.status == "passed" then
             local text = { config.pass_icon }
-            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
+            local line
+
+            if is_shared_example then
+              line = find_behaves_like_line(decoded)
+            else
+              line = decoded.line_number
+            end
+
+            vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(line) - 1, 0, {
               virt_text = { text }
             })
           else
@@ -95,7 +157,17 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             end
 
             local fail_backtrace = filter_backtrace(decoded.exception.backtrace)[1]
-            local example_line = string.match(fail_backtrace, ":([^:]+)")
+            local example_line
+            local exception_message
+
+            if is_shared_example then
+              exception_message = (decoded.description or '') ..
+                  ' at ' .. (decoded.line_number or '') .. ': ' .. decoded.exception.message
+              example_line = find_behaves_like_line(decoded)
+            else
+              exception_message = decoded.exception.message
+              example_line = string.match(fail_backtrace, ":([^:]+)")
+            end
 
             local text = { config.fail_icon }
             vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(example_line) - 1, 0, {
@@ -107,7 +179,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
               col = 0,
               severity = vim.diagnostic.severity.ERROR,
               source = "rspec",
-              message = decoded.exception.message,
+              message = exception_message,
               user_data = {},
             })
           end
