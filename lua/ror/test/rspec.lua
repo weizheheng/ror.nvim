@@ -136,7 +136,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             local exception_message
 
             if is_shared_example then
-              exception_message = (decoded.description or '') .. ': ' .. decoded.exception.message
+              exception_message = (decoded.description or '') .. ' at ' .. (decoded.line_number or '') .. ': ' .. decoded.exception.message
               example_line = find_behaves_like_line(decoded)
             else
               exception_message = decoded.exception.message
