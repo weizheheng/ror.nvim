@@ -126,9 +126,8 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
       M.summary = result.summary
 
       for _, decoded in ipairs(result.examples) do
-
         if decoded.file_path ~= nil and decoded.file_path ~= "" then
-          local is_shared_example = not (decoded.file_path:find(test_path))
+          local is_shared_example = not(string.find(decoded.file_path, vim.fn.fnamemodify(test_path, ":t:r")) ~= nil)
 
           if decoded.status == "passed" then
             local text = { config.pass_icon }
