@@ -133,10 +133,13 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
 
             local fail_backtrace = filter_backtrace(decoded.exception.backtrace)[1]
             local example_line
+            local exception_message
 
             if is_shared_example then
+              exception_message = (decoded.description or '') .. ': ' .. decoded.exception.message
               example_line = find_behaves_like_line(decoded)
             else
+              exception_message = decoded.exception.message
               example_line = string.match(fail_backtrace, ":([^:]+)")
             end
 
@@ -150,7 +153,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
               col = 0,
               severity = vim.diagnostic.severity.ERROR,
               source = "rspec",
-              message = decoded.exception.message,
+              message = exception_message,
               user_data = {},
             })
           end
