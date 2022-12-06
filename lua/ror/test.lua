@@ -37,11 +37,28 @@ local function verify_debugger()
 end
 
 local function run(type)
-  local bufnr = vim.api.nvim_get_current_buf()
-  local ns = vim.api.nvim_create_namespace("ror-minitest")
-  local relative_file_path = vim.fn.expand("%:~:.")
-  local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
+  local bufnr
+  local ns
+  local relative_file_path
+  local cursor_position
 
+  if vim.g.ror_last_command and type == "Last" then
+    bufnr = vim.g.ror_last_bufnr
+    relative_file_path = vim.g.ror_last_relative_file_path
+    cursor_position = vim.g.ror_last_cursor_position
+  elseif type == "Last" then
+    vim.notify("No tests to be runned")
+  else
+    bufnr = vim.api.nvim_get_current_buf()
+    relative_file_path = vim.fn.expand("%:~:.")
+    cursor_position = vim.api.nvim_win_get_cursor(0)[1]
+
+    vim.g.ror_last_bufnr = bufnr
+    vim.g.ror_last_relative_file_path = relative_file_path
+    vim.g.ror_last_cursor_position = cursor_position
+  end
+
+  local ns = vim.api.nvim_create_namespace("ror-minitest")
 
   local function get_test_path()
     if type == "Line" then
@@ -64,6 +81,10 @@ local function run(type)
 
     if type == "Line" then
       return "File: " .. path .. ":" .. cursor_position
+    elseif type == "OnlyFailures" then
+      return "File: " .. path .. ": only failures"
+    elseif type == "Last" then
+      return "Rerunning last command at: " .. path
     else
       return "File: " .. path
     end
@@ -98,9 +119,9 @@ local function run(type)
 
   vim.api.nvim_buf_call(terminal_bufnr, function()
     if string.find(test_path, "_spec.rb") then
-      require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+      require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
     else
-      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
     end
   end)
 end

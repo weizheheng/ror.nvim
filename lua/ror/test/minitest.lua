@@ -18,8 +18,16 @@ local function get_coverage_percentage(test_path)
   return coverage.percentage(original_file_path)
 end
 
-function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
-  vim.fn.termopen({ "rails", "test", test_path, "--json" }, {
+function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record, type)
+  local cmd
+
+  if type == "Last" then
+    cmd = vim.g.ror_last_command
+  else
+    cmd = { "rails", "test", test_path, "--json" }
+  end
+
+  vim.fn.termopen(cmd, {
     stdout_buffered = true,
     on_stdout = function(_, data)
       local failed = {}
