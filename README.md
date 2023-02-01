@@ -49,7 +49,6 @@ require("ror").setup({
 -- This "list_commands()" will show a list of all the available commands to run
 vim.keymap.set("n", "<Leader>rc", ":lua require('ror.commands').list_commands()<CR>", { silent = true })
 ```
-```
 
 ## Features
 
