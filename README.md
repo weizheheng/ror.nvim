@@ -74,6 +74,8 @@ look for files in:
 3. Views
 4. Migrations and more
 
+https://user-images.githubusercontent.com/40255418/215999170-77882a9b-f377-42f7-9d03-b8c606f3ea22.mp4
+
 ### 3. Generators helpers
 Rails provide a lot of generator methods, but one just couldn't remember them all!
 
