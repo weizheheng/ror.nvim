@@ -91,6 +91,8 @@ https://user-images.githubusercontent.com/40255418/216001892-9e777443-f6ba-4533-
 ### 4. Destroyer helpers
 Each Rails generators have a destroyer too!
 
+https://user-images.githubusercontent.com/40255418/216002768-e3ecc59f-76a2-4a86-b0f3-94abfdb4d1b4.mp4
+
 ### 5. CLI helpers
 There are a few commands that Rails developers will run daily while developing, instead of
 switching to your console, just run it in Neovim!
