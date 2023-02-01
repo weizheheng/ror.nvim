@@ -49,7 +49,7 @@ require("ror").setup({
 ### 1. Test Helpers
 Writing test in Rails is fun, but ror.nvim is bringing it to the next level!
 
-https://user-images.githubusercontent.com/40255418/215993118-edf9dcb5-7e6a-4c30-88f9-2f0f6c3a388e.mp4
+https://user-images.githubusercontent.com/40255418/215996583-544207d4-1979-4bd4-b069-bf46e7b7e52d.mp4
 
 #### Prerequisite
 **If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
