@@ -24,7 +24,6 @@ function M.percentage(original_file_path)
   elseif coverage_table.files then
     for _, value in pairs(coverage_table.files) do
       if value.filename == original_file_path then
-        print(vim.inspect(value))
         current_file_coverage = value.coverage.lines
       end
     end

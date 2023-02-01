@@ -19,6 +19,7 @@ local function get_coverage_percentage(test_path)
 end
 
 function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+  print("Test path: " .. test_path)
   vim.fn.termopen({ "bundle", "exec", "rspec", test_path, "--format", "j" }, {
     stdout_buffered = true,
     on_stdout = function(_, data)

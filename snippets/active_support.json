@@ -1,15 +1,8 @@
 {
-  "`delegate(*methods, to: nil, prefix: nil, allow_nil: nil, private: nil)`": {
-    "prefix": "delegate",
-    "body": [
-			"delegate: :${1:method}, to: :${2:object}, prefix: :${3:prefix}, allow_nil: ${0:allow_nil}"
-    ],
-    "description": "[documentation](https://api.rubyonrails.org/classes/Module.html#method-i-delegate)"
-  },
   "`ActiveSupport::Concern`": {
     "prefix": "concern",
     "body": [
-      "# frozen_string_literal: true\n",
+      "# frozen_string_literal: true\n\n",
       "module ${1:ModuleName}",
       "\textend ActiveSupport::Concern\n",
       "\tincluded do",
@@ -17,5 +10,20 @@
       "end"
     ],
     "description": "[documentation](https://api.rubyonrails.org/classes/ActiveSupport/Concern.html)"
+  },
+  "`ActiveSupport::CurrentAttributes`": {
+    "prefix": "current_attributes",
+    "body": [
+      "# frozen_string_literal: true\n",
+      "class Current < ActiveSupport::CurrentAttributes",
+      "\tattribute :user\n",
+      "\tresets { Time.zone = nil }\n",
+      "\tdef user=(user)",
+      "\t\tsuper",
+      "\t\tTime.zone = user.time_zone",
+      "\tend",
+      "end"
+    ],
+    "description": "[documentation](https://api.rubyonrails.org/classes/ActiveSupport/CurrentAttributes.html)"
   }
 }

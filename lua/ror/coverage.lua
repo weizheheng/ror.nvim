@@ -60,12 +60,39 @@ function M.show()
     return
   end
 
+  local not_covered_line = 0
+  local covered_line = 0
   for index, value in pairs(current_file_coverage_table) do
     if value == 0 then
+      not_covered_line = not_covered_line + 1
       vim.api.nvim_buf_add_highlight(bufnr, ns, down_hl_group, index - 1, 0, -1)
     elseif value ~= vim.NIL then
+      covered_line = covered_line + 1
       vim.api.nvim_buf_add_highlight(bufnr, ns, up_hl_group, index - 1, 0, -1)
     end
+  end
+
+  local total_line = not_covered_line + covered_line
+  local coverage_percentage = covered_line / total_line * 100
+  local nvim_notify_ok, nvim_notify = pcall(require, 'notify')
+
+  local log_level = vim.log.levels.INFO
+  if coverage_percentage < 50 then
+    log_level = vim.log.levels.ERROR
+  elseif coverage_percentage < 80 then
+    log_level = vim.log.levels.WARN
+  end
+  if nvim_notify_ok then
+    nvim_notify(
+      {
+        "File: " .. vim.fn.fnamemodify(original_file_path, ":."),
+        "Coverage: " .. string.format("%.2f%%", coverage_percentage)
+      },
+      log_level,
+      { title = "Coverage", timeout = 5000 }
+    )
+  else
+    vim.notify("Coverage: " .. string.format("%.2f%%", coverage_percentage))
   end
 end
 

@@ -37,15 +37,23 @@ local function verify_debugger()
 end
 
 local function run(type)
+  local is_rails = vim.fn.glob(vim.fn.getcwd() .. "/bin/rails") ~= ''
   local bufnr = vim.api.nvim_get_current_buf()
   local ns = vim.api.nvim_create_namespace("ror-minitest")
   local relative_file_path = vim.fn.expand("%:~:.")
   local cursor_position = vim.api.nvim_win_get_cursor(0)[1]
-
+  local test_name = ""
+  if is_rails == false and type == "Line" then
+    test_name = vim.fn.expand("<cword>")
+  end
 
   local function get_test_path()
-    if type == "Line" then
-      return relative_file_path .. ":" .. cursor_position
+    if is_rails then
+      if type == "Line" then
+        return relative_file_path .. ":" .. cursor_position
+      else
+        return relative_file_path
+      end
     else
       return relative_file_path
     end
@@ -100,7 +108,7 @@ local function run(type)
     if string.find(test_path, "_spec.rb") then
       require("ror.test.rspec").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
     else
-      require("ror.test.minitest").run(test_path, bufnr, ns, terminal_bufnr, notify_record)
+      require("ror.test.minitest").run(test_path, test_name, bufnr, ns, terminal_bufnr, notify_record)
     end
   end)
 end

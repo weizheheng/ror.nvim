@@ -1,0 +1,52 @@
+{
+	"`validate_presence_of`": {
+		"prefix": "spec_validate_presence_of",
+		"body": [
+			"it { should validate_presence_of(:${1:attribute}) }"
+		],
+		"description": ""
+	},
+	"`validate_numericality_of`": {
+		"prefix": "spec_validate_numericality_of",
+		"body": [
+			"it { should validate_numericality_of(:${1:attribute}).only_integer.is_greater_than(0) }"
+		],
+		"description": ""
+	},
+	"`validate_uniqueness_of`": {
+		"prefix": "spec_validate_uniqueness_of",
+		"body": [
+			"it { should validate_uniqueness_of(:${1:attribute}) }"
+		],
+		"description": ""
+	},
+	"`validate_uniqueness_of_scoped_to`": {
+		"prefix": "spec_validate_uniqueness_of_scoped_to",
+		"body": [
+			"it { should validate_uniqueness_of(:${1:attribute}).scoped_to(:${2:attribute}) }"
+		],
+		"description": ""
+	},
+	"`belongs_to`": {
+		"prefix": "spec_belongs_to",
+		"body": [
+			"it { should belong_to(:${1:attribute}) }"
+		],
+		"description": ""
+	},
+	"`has_many`": {
+		"prefix": "spec_have_many",
+		"body": [
+			"it { should have_many(:${1:attribute}).dependent(:destroy) }"
+		],
+		"description": ""
+	},
+	"`expect_to_change_count`": {
+		"prefix": "spec_expect_to_change_count",
+		"body": [
+			"expect { bundle_product.save }.to change { ${1:attribute1} }.by(${2:count1})",
+			"\t.and change { ${3:attribute2} }.by(${4:count2})"
+		],
+		"description": ""
+	}
+}

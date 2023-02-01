@@ -4,9 +4,28 @@ local notify_instance = require("ror.test.notify")
 
 local M = {}
 
+local function is_rails()
+  local root_path = vim.fn.getcwd()
+
+  if vim.fn.glob(root_path .. "/bin/rails") == '' then
+    return false
+  else
+    return true
+  end
+end
+
 local function get_coverage_percentage(test_path)
   local root_path = vim.fn.getcwd()
-  local original_file_path = string.gsub(test_path, "test", "/app", 1)
+  local function get_replace_path()
+    if is_rails() then
+      return "/app"
+    else
+      return "/lib"
+    end
+  end
+
+  local original_file_path = string.gsub(test_path, "test", get_replace_path, 1)
+
   original_file_path = root_path .. string.gsub(original_file_path, "_test", "")
 
   local _, finish = string.find(original_file_path, ".rb")
@@ -18,14 +37,26 @@ local function get_coverage_percentage(test_path)
   return coverage.percentage(original_file_path)
 end
 
-function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
-  vim.fn.termopen({ "rails", "test", test_path, "--json" }, {
+function M.run(test_path, test_name, bufnr, ns, terminal_bufnr, notify_record)
+  local command = { "rails", "test", test_path, "--json" }
+
+  if is_rails() == false then
+    if test_name ~= "" then
+      command = { "ruby", "-Ilib:test", test_path, "--name", test_name, "--json" }
+    else
+      command = { "ruby", "-Ilib:test", test_path, "--json" }
+    end
+  end
+
+  vim.fn.termopen(command, {
     stdout_buffered = true,
     on_stdout = function(_, data)
       local failed = {}
       local function filter_response(response)
         for _, v in ipairs(response) do
           if string.find(v, '{"examples":') then
+            return v
+          elseif string.find(v, "{\"examples\"") then
             return v
           end
         end
@@ -57,6 +88,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
 
       for _, line in ipairs(result.examples) do
         local decoded = vim.json.decode(line)
+        print(vim.inspect(decoded))
         if decoded.status == "PASS" then
           local text = { config.pass_icon }
           vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
