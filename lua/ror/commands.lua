@@ -30,7 +30,7 @@ function M.list_commands()
     {
       "Generate model", "Generate controller", "Generate migration", "Generate mailer", "Generate system test",
       "Find models", "Find controllers", "Find views", "Find model tests", "Find controller tests", "Find system tests", "Find migrations",
-      "Test current file", "Test current line", "Clear test result", "Attach test terminal",
+      "Test current file", "Test current line", "Clear test result", "Toggle test terminal",
       "Show file coverage", "Hide file coverage",
       "Go to model", "Go to controller", "Go to test", "Go to view", "Vertical split model", "Vertical split controller", "Vertical split test",
       "List routes", "Sync routes", "Sync routes without path helper",
@@ -80,7 +80,7 @@ function M.list_commands()
       elseif command == "Clear test result" then
         close_floating_window()
         require("ror.test").clear()
-      elseif command == "Attach test terminal" then
+      elseif command == "Toggle test terminal" then
         close_floating_window()
         require("ror.test").attach_terminal()
       elseif command == "Show file coverage" then

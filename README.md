@@ -47,7 +47,12 @@ require("ror").setup({
 ## Features
 
 ### 1. Test Helpers
-Writing test in Rails is fun, but ror.nvim is bringing it to the next level!
+Writing test in Rails is fun, but ror.nvim is bringing it to the next level with features like:
+- Easily run all the tests in the file
+- Easily run only a single test in the file
+- Test results are shown in the file itself
+- Show coverage percentage and also which lines are covered or not covered (with simplecov)
+- Popup window for debugging purpose when you put a debugger in your test.
 
 https://user-images.githubusercontent.com/40255418/215996583-544207d4-1979-4bd4-b069-bf46e7b7e52d.mp4
 
