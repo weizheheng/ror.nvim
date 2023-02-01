@@ -122,7 +122,9 @@ https://user-images.githubusercontent.com/40255418/216012430-f6a14937-cd69-411c-
 
 ### 8. Schema helpers
 I bet there are times you don't remember what columns does an ActiveRecord model has? And you have
-to go to schema.rb and look through them? Schema helpers is here to help!
+to go to schema.rb and look through them? ror.nvim is here to help!
+
+https://user-images.githubusercontent.com/40255418/216013411-53cc355f-d036-487d-9f52-6d2ae19d362d.mp4
 
 ### 9. Snippets
 
