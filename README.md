@@ -118,6 +118,8 @@ When working in a big project, it's very hard to remember all the routes. Rails 
 method like `rails routes` to list all the routes but that command is SLOwwwww. ROR routes helpers
 provide a better experience to look through all the routes in your project.
 
+https://user-images.githubusercontent.com/40255418/216012430-f6a14937-cd69-411c-a56d-0d90d109c98a.mp4
+
 ### 8. Schema helpers
 I bet there are times you don't remember what columns does an ActiveRecord model has? And you have
 to go to schema.rb and look through them? Schema helpers is here to help!
