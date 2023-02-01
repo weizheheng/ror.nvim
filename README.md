@@ -42,6 +42,13 @@ require("ror").setup({
     fail_icon = "❌"
   }
 })
+
+#### Usage
+```lua
+-- Set a keybind
+-- This "list_commands()" will show a list of all the available commands to run
+vim.keymap.set("n", "<Leader>rc", ":lua require('ror.commands').list_commands()<CR>", { silent = true })
+```
 ```
 
 ## Features
@@ -149,51 +156,4 @@ Example:
 ```lua
 -- With luasnip installed, you will need to add this line to your config
 require("luasnip.loaders.from_vscode").lazy_load()
-```
-
-
-### 2. Running Tests
-
-**Watch the [DEMO VIDEO](https://youtu.be/NmA0ADMWaW0)**
-
-This is now supporting both [minitest](https://github.com/minitest/minitest) and [rspec-rails](https://github.com/rspec/rspec-rails). 
-
-Running test with ror.nvim provides:
-1. Quick feedback loop on showing you the result of the test in the test file.
-  <img width="1267" alt="quick feedback loop" src="https://user-images.githubusercontent.com/40255418/202112014-3a5a0163-ea95-4b42-a071-50545a261da1.png">
-
-2. A floating terminal window you can attached to when running the test with a debugger.
-  ![attached terminal](https://user-images.githubusercontent.com/40255418/193445643-f91d7622-bcca-424a-867e-8998503581d0.png)
-
-3. If you have [simplecov](https://github.com/simplecov-ruby/simplecov) setup for your project.
-   ror.nvim will show you the coverage after running the test. You can also see which lines are not
-   covered in the original file. **PS: You will need to add in the SimpleCov::Formatter::JSONFormatter**
-
-#### Prerequisite
-**If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
-to your Ruby on Rails project**:
-
-```ruby
-group :test do
-  gem "minitest-json-reporter"
-end
-```
-
-#### Usage
-```lua
--- Set a keybind to the below commands, some example:
-vim.keymap.set("n", "<Leader>tf", ":lua require('ror.test').run()<CR>")
-vim.keymap.set("n", "<Leader>tl", ":lua require('ror.test').run('Line')<CR>")
-vim.keymap.set("n", "<Leader>tc", ":lua require('ror.test').clear()<CR>")
-vim.keymap.set("n", "<Leader>ta", ":lua require('ror.test').attach_terminal()<CR>")
-vim.keymap.set("n", "<Leader>cs", ":lua require('ror.coverage').show()<CR>")
-vim.keymap.set("n", "<Leader>ch", ":lua require('ror.coverage').clear()<CR>")
-
--- Or call the command directly
-:RorTestRun -- run the whole test file
-:RorTestRun Line -- run test on the current cursor position
-:RorTestClear -- clear diagnostics and extmark
-:RorTestAttachTerminal -- attach the terminal (useful when running test with debugger)
-:RorShowCoverage -- attach the terminal (useful when running test with debugger)
-:RorClearCoverage -- attach the terminal (useful when running test with debugger)
 ```
