@@ -111,6 +111,8 @@ Rails follows the Model, View, Controller (MVC) pattern, navigations helper prov
 jump to the associated models, views, and controllers easily. Of course, you can quickly jump to
 the test files too!
 
+https://user-images.githubusercontent.com/40255418/216009258-8bd6c232-bb22-4953-89e2-28b2cc4bedf1.mp4
+
 ### 7. Routes helpers
 When working in a big project, it's very hard to remember all the routes. Rails does provide a CLI
 method like `rails routes` to list all the routes but that command is SLOwwwww. ROR routes helpers
