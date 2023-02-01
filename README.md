@@ -79,6 +79,15 @@ https://user-images.githubusercontent.com/40255418/215999170-77882a9b-f377-42f7-
 ### 3. Generators helpers
 Rails provide a lot of generator methods, but one just couldn't remember them all!
 
+Supported generators:
+- Model
+- Mailer
+- Migration (add_column, remove_column, add_index)
+- Controller
+- System test
+
+https://user-images.githubusercontent.com/40255418/216001892-9e777443-f6ba-4533-945a-90c51f5e770a.mp4
+
 ### 4. Destroyer helpers
 Each Rails generators have a destroyer too!
 
