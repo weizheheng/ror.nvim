@@ -36,6 +36,7 @@ function M.list_commands()
       "List routes", "Sync routes", "Sync routes without path helper",
       "List table columns",
       "Destroy model", "Destroy controller", "Destroy migration",
+      "Run bundle install", "Run bundle update", "Run rails db:migrate", "Run rails db:migrate:status", "Run rails db:rollback STEP=1"
     },
     { prompt = "Select your ROR helper commands" },
     function (command)
@@ -121,11 +122,29 @@ function M.list_commands()
         close_floating_window()
         require("ror.schema").list_table_columns()
       elseif command == "Destroy model" then
+        close_floating_window()
         require("ror.destroyers.model").destroy()
       elseif command == "Destroy controller" then
+        close_floating_window()
         require("ror.destroyers.controller").destroy()
       elseif command == "Destroy migration" then
+        close_floating_window()
         require("ror.destroyers.migration").destroy()
+      elseif command == "Run rails db:migrate" then
+        close_floating_window()
+        require("ror.runners.db_migrate").run()
+      elseif command == "Run rails db:rollback STEP=1" then
+        close_floating_window()
+        require("ror.runners.db_rollback").run()
+      elseif command == "Run rails db:migrate:status" then
+        close_floating_window()
+        require("ror.runners.db_migrate_status").run()
+      elseif command == "Run bundle install" then
+        close_floating_window()
+        require("ror.runners.bundle_install").run()
+      elseif command == "Run bundle update" then
+        close_floating_window()
+        require("ror.runners.bundle_update").run()
       else
         close_floating_window()
       end

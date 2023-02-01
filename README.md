@@ -6,6 +6,9 @@ Make Ruby on Rails development experience FUN!
 Plug 'weizheheng/ror.nvim'
 ```
 
+## Dependencies
+1. [telescope](https://github.com/nvim-telescope/telescope.nvim)
+
 ## Optional Dependencies
 
 1. [nvim-notify](https://github.com/rcarriga/nvim-notify) (RECOMMENDED)
@@ -43,7 +46,52 @@ require("ror").setup({
 
 ## Features
 
-### 1. Snippets
+### 1. Test Helpers
+Writing test in Rails is fun, but ror.nvim is bringing it to the next level!
+
+#### Prerequisite
+**If you are using minitest, you will need to install the [minitest-json-reporter](https://rubygems.org/gems/minitest-json-reporter)
+to your Ruby on Rails project**:
+
+```ruby
+group :test do
+  gem "minitest-json-reporter"
+end
+```
+
+### 2. Finders
+I love Telescope, but sometimes there are just too much noise. ROR finders allow you to quickly
+look for files in:
+1. Models and model tests
+2. Controllers and controller tests
+3. Views
+4. Migrations and more
+
+### 3. Generators helpers
+Rails provide a lot of generator methods, but one just couldn't remember them all!
+
+### 4. Destroyer helpers
+Each Rails generators have a destroyer too!
+
+### 5. CLI helpers
+There are a few commands that Rails developers will run daily while developing, instead of
+switching to your console, just run it in Neovim!
+
+### 6. Navigation helpers
+Rails follows the Model, View, Controller (MVC) pattern, navigations helper provide a way to easily
+jump to the associated models, views, and controllers easily. Of course, you can quickly jump to
+the test files too!
+
+### 7. Routes helpers
+When working in a big project, it's very hard to remember all the routes. Rails does provide a CLI
+method like `rails routes` to list all the routes but that command is SLOwwwww. ROR routes helpers
+provide a better experience to look through all the routes in your project.
+
+### 8. Schema helpers
+I bet there are times you don't remember what columns does an ActiveRecord model has? And you have
+to go to schema.rb and look through them? Schema helpers is here to help!
+
+### 9. Snippets
 
 I have been a Rails developer for 3 years now, and sometimes I still don't remember a lot of the
 built-in methods. There are active developments on adding types to Ruby code with tools like
