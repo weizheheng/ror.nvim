@@ -133,20 +133,17 @@ to go to schema.rb and look through them? ror.nvim is here to help!
 
 https://user-images.githubusercontent.com/40255418/216013411-53cc355f-d036-487d-9f52-6d2ae19d362d.mp4
 
-### 9. Snippets
+### 9. Snippets + [ror-lsp](https://github.com/weizheheng/ror-lsp) (EXPERIMENTAL)
 
 I have been a Rails developer for 3 years now, and sometimes I still don't remember a lot of the
 built-in methods. There are active developments on adding types to Ruby code with tools like
 [Sorbet](https://sorbet.org/) and Ruby's built-in [rbs](https://github.com/ruby/rbs) which when
 pair with [steep](https://github.com/soutaro/steep) might give a very good developmet experience
-with all language server features. I am excited to put my hands on those tools, but for now, here
-are a list of snippets that might be useful for you while building a Rails app.
+with all language server features.
 
-Example:
-- Simple definition
-- Link to the documentation (Tired of Googling them everytime)
+I came across [Aaron Patterson](https://github.com/tenderlove)'s [YouTube video](https://www.youtube.com/watch?v=9fJntxnH4wY) on creating a language server and also Shopify's [ror-lsp](https://github.com/Shopify/ruby-lsp) GitHub repo and decided to create my own ror-lsp.
 
-<img width="939" alt="image" src="https://user-images.githubusercontent.com/40255418/192268415-e3920857-e6e5-435d-aff9-81db6e695922.png">
+https://user-images.githubusercontent.com/40255418/216020106-5191001c-e7ad-4507-81fb-e61a31cbf6ae.mp4
 
 #### Prerequisite
 - Snippets is tested to be working with [Luasnip](https://github.com/L3MON4D3/LuaSnip)
