@@ -97,6 +97,15 @@ https://user-images.githubusercontent.com/40255418/216002768-e3ecc59f-76a2-4a86-
 There are a few commands that Rails developers will run daily while developing, instead of
 switching to your console, just run it in Neovim!
 
+Supported commands:
+- bundle update
+- bundle install
+- rails db:migrate
+- rails db:migrate:status
+- rails db:rollback STEP=1
+
+https://user-images.githubusercontent.com/40255418/216003425-c16004fb-c7e4-47c0-9716-d460ac9a34b3.mp4
+
 ### 6. Navigation helpers
 Rails follows the Model, View, Controller (MVC) pattern, navigations helper provide a way to easily
 jump to the associated models, views, and controllers easily. Of course, you can quickly jump to
