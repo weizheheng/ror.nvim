@@ -31,10 +31,6 @@
       },
       {
         "language": "ruby",
-        "path": "./snippets/minitest.json"
-      },
-      {
-        "language": "ruby",
         "path": "./snippets/rspec.json"
       }
     ]

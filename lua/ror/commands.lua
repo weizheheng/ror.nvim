@@ -111,6 +111,7 @@ function M.list_commands()
         close_floating_window()
         require("ror.navigations").go_to_test("vsplit")
       elseif command == "List routes" then
+        close_floating_window()
         require("ror.routes").list_routes()
       elseif command == "Sync routes" then
         close_floating_window()

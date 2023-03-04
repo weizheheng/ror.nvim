@@ -50,17 +50,11 @@ function M.run()
     on_stderr = function(_, error)
       if not migrated then
         if nvim_notify_ok and not migrated then
-          nvim_notify.dismiss()
-          nvim_notify(
-            "Something went wrong running db:migrate",
-            vim.log.levels.ERROR,
-            {
-              title = "Error running db:migrate!",
-              timeout = 5000,
-            }
-          )
+          print("Error: ")
+          print(vim.inspect(error))
         else
-          vim.notify("Error running db:migrate!")
+          print("Error: ")
+          print(vim.inspect(error))
         end
       end
     end

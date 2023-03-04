@@ -107,12 +107,8 @@ local function model_generator_steps(close_floating_window)
         end,
         on_stderr = function(_, error)
           if error[1] ~= "" then
-            nvim_notify.dismiss()
-            nvim_notify(
-              error,
-              vim.log.levels.ERROR,
-              { title = "Error generating model!", timeout = 5000 }
-            )
+            print("Error: ")
+            print(vim.inspect(error))
           end
         end
       })
