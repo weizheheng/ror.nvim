@@ -15,6 +15,21 @@ Plug 'weizheheng/ror.nvim'
    - With nvim-notify installed you can get beautiful notification on when the test is running and
        also display the result of the run when it's done.
    - Otherwise, the notification will be shown in the command line through vim.notify.
+2. [dressing.nvim](https://github.com/stevearc/dressing.nvim)
+   - I am using this plugin which make vim.ui.select to use telescope and also vim.ui.input to be a
+       floating window asking for input as shown in my demo.
+   - The config I am using for dressing.nvim
+
+```lua
+require("dressing").setup({
+  input = {
+    min_width = { 60, 0.9 },
+  },
+  select = {
+    -- telescope = require('telescope.themes').get_ivy({...})
+    telescope = require('telescope.themes').get_dropdown({ layout_config = { height = 15, width = 90 } }), }
+})
+```
 
 ## Usage
 ```lua
