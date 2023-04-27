@@ -1,0 +1,17 @@
+{
+  "react_functional_component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from \"react\"",
+      "",
+      "interface Props {",
+      "}",
+      "",
+      "export const $TM_FILENAME_BASE = ({}: Props) => {",
+      "\treturn (",
+      "\t\t<div></div>",
+      "\t)",
+      "}"
+    ]
+  }
+}

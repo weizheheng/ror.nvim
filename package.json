@@ -32,6 +32,10 @@
       {
         "language": "ruby",
         "path": "./snippets/rspec.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/react.json"
       }
     ]
   }
