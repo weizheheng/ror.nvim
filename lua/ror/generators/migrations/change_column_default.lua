@@ -14,26 +14,27 @@ function M.run(close_floating_window)
     end
   end
 
-  vim.ui.select(parsed_table_names, { prompt = "Adding index to which table?" }, function(selected_table)
+  vim.ui.select(parsed_table_names, { prompt = "Changing column default for which table?" }, function(selected_table)
     if selected_table ~= nil then
       local awk_command = string.format('/create_table "%s"/{flag=1;next}/end$/{flag=0}flag', selected_table)
       local columns = vim.split(vim.fn.system({ "awk", awk_command, root_path .. "/db/schema.rb" }), "\n")
       local parsed_columns = {}
       for _, column in pairs(columns) do
-        if column ~= "" and not string.match(column, "t.index") then
-          local parsed_column = string.match(column, 't%.%w+%s+"([^"]+)')
+        if column ~= "" and string.match(column, "default:") then
+          local parsed_column = string.match(column, "^%s*(.*)$")
           table.insert(parsed_columns, parsed_column)
         end
       end
 
       vim.ui.select(
         parsed_columns,
-        { prompt = "Adding index to which column?" },
+        { prompt = "Changing which column's default value?" },
         function (selected_column)
           if selected_column ~= nil then
+            local column_name = string.match(selected_column, 't%.%w+%s+"([^"]+)')
             local nvim_notify_ok, nvim_notify = pcall(require, 'notify')
 
-            local migration_name = "add_index_" .. selected_column .. "_to_" .. selected_table
+            local migration_name = "change_" .. column_name .. "_default_in_" .. selected_table
             local command = { "bin/rails", "generate", "migration", migration_name }
             if nvim_notify_ok then
               nvim_notify(
@@ -58,15 +59,12 @@ function M.run(close_floating_window)
                     parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
                   end
                 end
-
-                local file_created = parsed_data[#parsed_data]
-                local start, _ = string.find(file_created, "db")
-                file_created = string.sub(file_created, start)
+                local file_created = string.gsub(parsed_data[2], "create    ", "")
 
                 local file_content = vim.split(Path:new(file_created):read(), "\n")
                 local active_record_version = file_content[1]
                 local parsed_content = active_record_version .. "\n" .. "  def change\n"
-                parsed_content = parsed_content .. "    add_index :" .. selected_table .. ", :" .. selected_column .. "\n"
+                parsed_content = parsed_content .. "    change_column_default :" .. selected_table .. ", :" .. column_name .. ', "new_type"' .. "\n"
                 parsed_content = parsed_content .. "  end\n" .. "end\n"
 
                 Path:new(file_created):write(parsed_content, "w")

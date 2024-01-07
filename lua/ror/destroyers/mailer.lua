@@ -2,37 +2,37 @@ local M = {}
 
 function M.destroy()
   local root_path = vim.fn.getcwd()
-  local migrations = vim.split(vim.fn.glob(root_path .. "/db/migrate/*rb"), "\n")
-  local parsed_migrations = {}
+  local mailers = vim.split(vim.fn.glob(root_path .. "/app/mailers/*rb"), "\n")
+  local parsed_mailers = {}
 
-  for _, value in ipairs(migrations) do
+  for _, value in ipairs(mailers) do
     -- take only the filename without extension
     local filename = vim.fn.fnamemodify(value, ":t:r")
-    local start, _ = string.find(filename, "_")
-    local parsed_filename = string.sub(filename, start + 1)
-    table.insert(parsed_migrations, 1, parsed_filename)
+    local parsed_mailer = string.match(filename, "(.-)_.*$")
+    print(vim.inspect(parsed_mailer))
+    table.insert(parsed_mailers, parsed_mailer)
   end
 
   vim.ui.select(
-    parsed_migrations,
+    parsed_mailers,
     {
-      prompt = "Select migration to be destroyed:"
+      prompt = "Select mailer to be destroyed:"
     },
-    function (migration_name)
-      if migration_name ~= nil then
+    function (mailer_name)
+      if mailer_name ~= nil then
         local nvim_notify_ok, nvim_notify = pcall(require, 'notify')
 
         if nvim_notify_ok then
           nvim_notify(
-            "Command: bin/rails destroy migration " .. migration_name .. "...",
+            "Command: bin/rails destroy mailer " .. mailer_name .. "...",
             "warn",
-            { title = "Destroying migration...", timeout = false }
+            { title = "Destroying mailer...", timeout = false }
           )
         else
-          vim.notify("Destroying migration...")
+          vim.notify("Destroying mailer...")
         end
 
-        vim.fn.jobstart({ "bin/rails", "destroy", "migration", migration_name }, {
+        vim.fn.jobstart({ "bin/rails", "destroy", "mailer", mailer_name }, {
           stdout_buffered = true,
           on_stdout = function(_, data)
             if not data then
@@ -50,10 +50,10 @@ function M.destroy()
               nvim_notify(
                 parsed_data,
                 vim.log.levels.ERROR,
-                { title = "Migration destroyed successfully!", timeout = 5000 }
+                { title = "Mailer destroyed successfully!", timeout = 5000 }
               )
             else
-              vim.notify("Migration destroyed successfully!")
+              vim.notify("Mailer destroyed successfully!")
             end
           end,
           on_stderr = function(_, error)

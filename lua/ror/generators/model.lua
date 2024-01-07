@@ -93,6 +93,9 @@ local function model_generator_steps(close_floating_window)
           for i, v in ipairs(data) do
             parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
           end
+          -- First line is invoke active record
+          local file_created = string.gsub(parsed_data[2], "create ", "")
+          print(file_created)
 
           if nvim_notify_ok then
             nvim_notify.dismiss()
@@ -101,8 +104,10 @@ local function model_generator_steps(close_floating_window)
               vim.log.levels.INFO,
               { title = "Model generated successfully!", timeout = 5000 }
             )
+            vim.api.nvim_command("edit " .. file_created)
           else
             vim.notify("Model generated successfully!")
+            vim.api.nvim_command("edit " .. file_created)
           end
         end,
         on_stderr = function(_, error)

@@ -81,6 +81,7 @@ local function remove_column_steps(close_floating_window, columns)
             parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
           end
 
+          local file_created = string.gsub(parsed_data[2], "create    ", "")
           if nvim_notify_ok then
             nvim_notify.dismiss()
             nvim_notify(
@@ -88,8 +89,10 @@ local function remove_column_steps(close_floating_window, columns)
               vim.log.levels.INFO,
               { title = "Migration generated successfully!", timeout = 5000 }
             )
+            vim.api.nvim_command("edit " .. file_created)
           else
             vim.notify("Migration generated successfully!")
+            vim.api.nvim_command("edit " .. file_created)
           end
         end,
         on_stderr = function(_, error)

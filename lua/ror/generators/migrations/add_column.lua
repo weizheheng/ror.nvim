@@ -23,8 +23,18 @@ local function add_column_steps(close_floating_window)
               function (column_type)
                 result.column_type = column_type
 
-                table.insert(M.ADD_COLUMN_RESULT.columns, result)
-                add_column_steps(close_floating_window)
+                vim.ui.select(
+                  { "yes", "no" },
+                  { prompt = "With index?" },
+                  function (add_index)
+                    if add_index == "yes" then
+                      result.column_index = true
+                    end
+
+                    table.insert(M.ADD_COLUMN_RESULT.columns, result)
+                    add_column_steps(close_floating_window)
+                  end
+                )
               end
             )
           else
@@ -35,6 +45,7 @@ local function add_column_steps(close_floating_window)
   elseif choice2 == "No" then
       local add_columns_info = M.ADD_COLUMN_RESULT
 
+      print(vim.inspect(add_columns_info))
       local command = { "bin/rails", "generate", "migration",  }
 
       local add_column_string = "add"
@@ -49,6 +60,9 @@ local function add_column_steps(close_floating_window)
         local column_type = info.column_type
 
         local column_info = column_name .. ":" .. column_type
+        if info.column_index then
+          column_info = column_info .. ":" .. "index"
+        end
 
         table.insert(command, column_info)
       end
@@ -77,6 +91,7 @@ local function add_column_steps(close_floating_window)
             parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
           end
 
+          local file_created = string.gsub(parsed_data[2], "create    ", "")
           if nvim_notify_ok then
             nvim_notify.dismiss()
             nvim_notify(
@@ -84,8 +99,10 @@ local function add_column_steps(close_floating_window)
               vim.log.levels.INFO,
               { title = "Migration generated successfully!", timeout = 5000 }
             )
+            vim.api.nvim_command("edit " .. file_created)
           else
             vim.notify("Migration generated successfully!")
+            vim.api.nvim_command("edit " .. file_created)
           end
         end,
         on_stderr = function(_, error)

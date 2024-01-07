@@ -9,7 +9,8 @@ function M.generate(close_floating_window)
           { prompt = "Mailer methods (separated by space)" },
           function (methods)
             local generate_command = { "bin/rails", "generate", "mailer", mailer_name }
-            for method in methods:gmatch("%w+") do table.insert(generate_command, method) end
+            print(vim.inspect(methods))
+            for method in methods:gmatch("%S+") do table.insert(generate_command, method) end
 
             local nvim_notify_ok, nvim_notify = pcall(require, 'notify')
 
@@ -35,6 +36,7 @@ function M.generate(close_floating_window)
                   parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
                 end
 
+                local file_created = string.gsub(parsed_data[1], "create ", "")
                 if nvim_notify_ok then
                   nvim_notify.dismiss()
                   nvim_notify(
@@ -42,8 +44,10 @@ function M.generate(close_floating_window)
                     vim.log.levels.INFO,
                     { title = "Mailer generated successfully!", timeout = 5000 }
                   )
+                  vim.api.nvim_command("edit " .. file_created)
                 else
                   vim.notify("Mailer generated successfully!")
+                  vim.api.nvim_command("edit " .. file_created)
                 end
               end,
               on_stderr = function(_, error)

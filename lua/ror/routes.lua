@@ -132,7 +132,20 @@ function M.list_routes()
   vim.ui.select(
     routes,
     { prompt = "Available routes" },
-    function ()
+    function (route)
+      if route ~= nil then
+        local nvim_notify_ok, nvim_notify = pcall(require, 'notify')
+        if nvim_notify_ok then
+          nvim_notify.dismiss()
+          nvim_notify(
+            route,
+            vim.log.levels.INFO,
+            { title = "Selected Route", timeout = 8000 }
+          )
+        else
+          vim.notify(route)
+        end
+      end
     end
   )
 end

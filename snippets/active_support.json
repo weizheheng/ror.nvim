@@ -2,7 +2,7 @@
   "`ActiveSupport::Concern`": {
     "prefix": "concern",
     "body": [
-      "# frozen_string_literal: true\n\n",
+      "# frozen_string_literal: true\n",
       "module ${1:ModuleName}",
       "\textend ActiveSupport::Concern\n",
       "\tincluded do",

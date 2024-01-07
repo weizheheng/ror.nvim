@@ -28,14 +28,14 @@ function M.list_commands()
 
   vim.ui.select(
     {
-      "Generate model", "Generate controller", "Generate migration", "Generate mailer", "Generate system test",
-      "Find models", "Find controllers", "Find views", "Find model tests", "Find controller tests", "Find system tests", "Find migrations",
+      "Generate model", "Generate controller", "Generate migration", "Generate mailer", "Generate system test", "Generate stimulus controller",
+      "Find models", "Find controllers", "Find mailers", "Find views", "Find model tests", "Find controller tests", "Find system tests", "Find migrations", "Find stimulus controllers",
       "Test current file", "Test current line", "Clear test result", "Toggle test terminal",
       "Show file coverage", "Hide file coverage",
       "Go to model", "Go to controller", "Go to test", "Go to view", "Vertical split model", "Vertical split controller", "Vertical split test",
       "List routes", "Sync routes", "Sync routes without path helper",
       "List table columns",
-      "Destroy model", "Destroy controller", "Destroy migration",
+      "Destroy model", "Destroy controller", "Destroy migration", "Destroy mailer",
       "Run bundle install", "Run bundle update", "Run rails db:migrate", "Run rails db:migrate:status", "Run rails db:rollback STEP=1"
     },
     { prompt = "Select your ROR helper commands" },
@@ -50,12 +50,17 @@ function M.list_commands()
         require("ror.generators.mailer").generate(close_floating_window)
       elseif command == "Generate system test" then
         require("ror.generators.system_test").generate(close_floating_window)
+      elseif command == "Generate stimulus controller" then
+        require("ror.generators.stimulus").generate(close_floating_window)
       elseif command == "Find models" then
         close_floating_window()
         require("ror.finders.model").find()
       elseif command == "Find controllers" then
         close_floating_window()
         require("ror.finders.controller").find()
+      elseif command == "Find mailers" then
+        close_floating_window()
+        require("ror.finders.mailer").find()
       elseif command == "Find views" then
         close_floating_window()
         require("ror.finders.view").find()
@@ -71,6 +76,9 @@ function M.list_commands()
       elseif command == "Find migrations" then
         close_floating_window()
         require("ror.finders.migration").find()
+      elseif command == "Find stimulus controllers" then
+        close_floating_window()
+        require("ror.finders.stimulus").find()
       elseif command == "Test current file" then
         close_floating_window()
         require("ror.test").run()
@@ -131,6 +139,9 @@ function M.list_commands()
       elseif command == "Destroy migration" then
         close_floating_window()
         require("ror.destroyers.migration").destroy()
+      elseif command == "Destroy mailer" then
+        close_floating_window()
+        require("ror.destroyers.mailer").destroy()
       elseif command == "Run rails db:migrate" then
         close_floating_window()
         require("ror.runners.db_migrate").run()

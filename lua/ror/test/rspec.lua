@@ -19,7 +19,6 @@ local function get_coverage_percentage(test_path)
 end
 
 function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
-  print("Test path: " .. test_path)
   vim.fn.termopen({ "bundle", "exec", "rspec", test_path, "--format", "j" }, {
     stdout_buffered = true,
     on_stdout = function(_, data)
@@ -60,6 +59,12 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             if finish == nil then
               _, finish = string.find(result, 'failures"}')
             end
+            if finish == nil then
+              _, finish = string.find(result, 'pending"}')
+            end
+            if finish == nil then
+              _, finish = string.find(result, 'pendings"}')
+            end
 
             return finish
           end
@@ -76,7 +81,7 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
 
       for _, decoded in ipairs(result.examples) do
         if string.find(decoded.file_path, vim.fn.fnamemodify(test_path, ":t:r")) ~= nil then
-          if decoded.status == "passed" then
+          if decoded.status == "passed" or decoded.status == "pending" then
             local text = { config.pass_icon }
             vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line_number) - 1, 0, {
               virt_text = { text }
@@ -102,13 +107,21 @@ function M.run(test_path, bufnr, ns, terminal_bufnr, notify_record)
             vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(example_line) - 1, 0, {
               virt_text = { text }
             })
+            -- Convert the table to a string with the specified order
+            local message = decoded.exception.class .. "\n" .. decoded.exception.message .. "\n"
+
+            local maxBacktrace = math.min(10, #decoded.exception.backtrace)
+            for i = 1, maxBacktrace do
+              message = message .. decoded.exception.backtrace[i] .. "\n"
+            end
+
             table.insert(failed, {
               bufnr = bufnr,
               lnum = tonumber(example_line) - 1,
               col = 0,
               severity = vim.diagnostic.severity.ERROR,
               source = "rspec",
-              message = decoded.exception.message,
+              message = message,
               user_data = {},
             })
           end

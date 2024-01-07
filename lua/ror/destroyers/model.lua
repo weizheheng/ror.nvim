@@ -8,7 +8,16 @@ function M.destroy()
     if migration ~= "" then
       local filename = vim.fn.fnamemodify(migration, ":t:r")
       local _, finish = string.find(filename, "_create_")
-      local parsed_model_name = string.sub(filename, finish + 1, #filename - 1)
+      local plural_model_names = string.sub(filename, finish + 1, #filename)
+      local parsed_model_name
+
+      if plural_model_names:sub(-3) == "ies" then
+        parsed_model_name = plural_model_names:sub(1, -4) .. "y"
+      elseif plural_model_names:sub(-2) == "es" then
+        parsed_model_name = plural_model_names:sub(1, -3) .. ""
+      elseif plural_model_names:sub(-1) == "s" then
+        parsed_model_name = plural_model_names:sub(1, -2) .. ""
+      end
 
       table.insert(parsed_model_names, parsed_model_name)
     end
