@@ -1,6 +1,8 @@
 # ror.nvim
 Make Ruby on Rails development experience FUN!
 
+YouTube demo [video](https://www.youtube.com/watch?v=uPyklWpVjFI).
+
 ## Installation
 ```vim
 Plug 'weizheheng/ror.nvim'
