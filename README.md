@@ -65,6 +65,15 @@ require("ror").setup({
 vim.keymap.set("n", "<Leader>rc", ":lua require('ror.commands').list_commands()<CR>", { silent = true })
 ```
 
+## LunarVim
+```lua
+-- Set a keybind
+lvim.builtin.which_key.mappings["r"] = {
+    name = "Ruby on Rails",
+    c = { "<cmd>lua require('ror.commands').list_commands()<cr>", "RoR Menu" },
+}
+```
+
 ## Features
 
 ### 1. Test Helpers
