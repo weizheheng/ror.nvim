@@ -25,7 +25,7 @@ local function verify_debugger()
 
     if last_line == '[Process exited 1]' or vim.fn.bufnr() == M.terminal_bufnr then
       return
-    elseif last_line:match('%(byebug%)') or last_line:match('pry%(#.*%)') or last_line:match('%(rdbg%)') or last_line == ':' then
+    elseif last_line:match('%(byebug%)') or last_line:match('pry%(#.*%)') or last_line:match('%(rdbg[%)@]') or last_line == ':' then
       M.attach_terminal()
       vim.cmd("startinsert")
     else
