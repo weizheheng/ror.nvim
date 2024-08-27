@@ -6,7 +6,7 @@ function M.find()
 	local previewers = require("telescope.previewers")
 	local conf = require("telescope.config").values
 	local root_path = vim.fn.getcwd()
-	local tests = vim.split(vim.fn.glob(root_path .. "/{test,spec}/models/**/*rb"), "\n")
+	local tests = vim.split(vim.fn.glob(root_path .. "/{test,spec}/services/**/*rb"), "\n")
 	local parsed_tests = {}
 	for _, test in ipairs(tests) do
 		-- take only the filename without extension
