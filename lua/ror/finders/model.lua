@@ -31,6 +31,7 @@
 -- end
 --
 -- return M
+
 local M = {}
 
 function M.find()
@@ -42,26 +43,29 @@ function M.find()
 
 	for _, value in ipairs(models) do
 		if value ~= "" then
-			local parsed_filename = vim.fn.fnamemodify(value, ":~:.")
-			table.insert(parsed_models, parsed_filename)
+			-- Keep the full path for the previewer
+			table.insert(parsed_models, value)
 		end
 	end
 
 	if #parsed_models > 0 then
-		fzf.fzf_exec(parsed_models, {
+		fzf.files({
 			prompt = "Models > ",
+			cmd = string.format('echo "%s"', table.concat(parsed_models, "\n")),
 			actions = {
 				["default"] = function(selected)
 					-- Open the selected file
 					vim.cmd("edit " .. selected[1])
 				end,
 			},
-			previewer = "builtin", -- Use the built-in file previewer
+			previewer = "cat", -- Use the system's cat command for preview
+			preview_opts = "nohidden", -- Show preview by default
 			winopts = {
 				height = 0.8, -- Window height (80% of screen)
 				width = 0.8, -- Window width (80% of screen)
 				preview = {
-					hidden = "hidden", -- Show preview by default
+					default = "yes", -- Enable preview by default
+					vertical = "right:50%", -- Preview window on the right, 50% width
 				},
 			},
 		})
