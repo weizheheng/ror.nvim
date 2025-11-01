@@ -90,24 +90,35 @@ local function model_generator_steps(close_floating_window)
           end
 
           local parsed_data = {}
+          local model_file_created
+          local migration_file_created
+
           for i, v in ipairs(data) do
-            parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
+            parsed_data[i] = string.gsub(v, '%s+', ' ') -- Replace one or more whitespace characters with a single space
+            parsed_data[i] = string.gsub(parsed_data[i], '^%s*(.-)%s*$', '%1')
+            -- Check if the parsed data contains the phrase "create app/controllers"
+            if parsed_data[i]:find("create app/models") then
+              model_file_created = string.gsub(parsed_data[i], "create ", "")
+            end
+
+            if parsed_data[i]:find("create db/migrate") then
+              migration_file_created = string.gsub(parsed_data[i], "create ", "")
+            end
           end
-          -- First line is invoke active record
-          local file_created = string.gsub(parsed_data[2], "create ", "")
-          print(file_created)
 
           if nvim_notify_ok then
             nvim_notify.dismiss()
             nvim_notify(
-              parsed_data,
+              { "File: ", "- " .. model_file_created, "- " .. migration_file_created },
               vim.log.levels.INFO,
               { title = "Model generated successfully!", timeout = 5000 }
             )
-            vim.api.nvim_command("edit " .. file_created)
+            vim.api.nvim_command("edit " .. model_file_created)
+            vim.api.nvim_command("vsplit " .. migration_file_created)
           else
             vim.notify("Model generated successfully!")
-            vim.api.nvim_command("edit " .. file_created)
+            vim.api.nvim_command("edit " .. model_file_created)
+            vim.api.nvim_command("vsplit " .. migration_file_created)
           end
         end,
         on_stderr = function(_, error)

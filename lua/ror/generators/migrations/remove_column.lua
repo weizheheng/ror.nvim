@@ -77,15 +77,21 @@ local function remove_column_steps(close_floating_window, columns)
           end
 
           local parsed_data = {}
+          local file_created
+
           for i, v in ipairs(data) do
-            parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
+            parsed_data[i] = string.gsub(v, '%s+', ' ') -- Replace one or more whitespace characters with a single space
+            parsed_data[i] = string.gsub(parsed_data[i], '^%s*(.-)%s*$', '%1')
+            -- Check if the parsed data contains the phrase
+            if parsed_data[i]:find("create db/migrate") then
+              file_created = string.gsub(parsed_data[i], "create ", "")
+            end
           end
 
-          local file_created = string.gsub(parsed_data[2], "create    ", "")
           if nvim_notify_ok then
             nvim_notify.dismiss()
             nvim_notify(
-              parsed_data,
+              "File: " .. file_created,
               vim.log.levels.INFO,
               { title = "Migration generated successfully!", timeout = 5000 }
             )

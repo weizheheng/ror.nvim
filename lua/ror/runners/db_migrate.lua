@@ -35,7 +35,7 @@ function M.run()
         if nvim_notify_ok then
           nvim_notify.dismiss()
           nvim_notify(
-            parsed_data,
+            parsed_data[#parsed_data],
             vim.log.levels.INFO,
             {
               title = "db:migrate ran successfully!",

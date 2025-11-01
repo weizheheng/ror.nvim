@@ -29,7 +29,7 @@ vim.fn.jobstart({ "bin/rails", "db:rollback", "STEP=1" }, {
     if nvim_notify_ok then
       nvim_notify.dismiss()
       nvim_notify(
-        parsed_data,
+        parsed_data[#parsed_data],
         vim.log.levels.ERROR,
         { title = "db:rollback STEP=1 ran successfully!", timeout = 5000 }
       )

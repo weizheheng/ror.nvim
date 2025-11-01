@@ -46,16 +46,22 @@ function M.destroy()
                   end
 
                   local parsed_data = {}
+                  local file
+
                   for i, v in ipairs(data) do
-                    -- Removing white space
-                    parsed_data[i] = string.gsub(v, '^%s*(.-)%s*$', '%1')
+                  parsed_data[i] = string.gsub(v, '%s+', ' ') -- Replace one or more whitespace characters with a single space
+                  parsed_data[i] = string.gsub(parsed_data[i], '^%s*(.-)%s*$', '%1')
+                  -- Check if the parsed data contains the phrase "create app/controllers"
+                  if parsed_data[i]:find("remove app/controllers") then
+                    file = string.gsub(parsed_data[i], "remove ", "")
+                  end
                   end
 
                   if nvim_notify_ok then
                     nvim_notify.dismiss()
                     nvim_notify(
-                      parsed_data,
-                      vim.log.levels.ERROR,
+                      "Controller: " .. file,
+                      vim.log.levels.INFO,
                       { title = "Controller destroyed successfully!", timeout = 5000 }
                     )
                   else

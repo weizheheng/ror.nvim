@@ -88,7 +88,6 @@ function M.run(test_path, test_name, bufnr, ns, terminal_bufnr, notify_record)
 
       for _, line in ipairs(result.examples) do
         local decoded = vim.json.decode(line)
-        print(vim.inspect(decoded))
         if decoded.status == "PASS" then
           local text = { config.pass_icon }
           vim.api.nvim_buf_set_extmark(bufnr, ns, tonumber(decoded.line) - 1, 0, {
